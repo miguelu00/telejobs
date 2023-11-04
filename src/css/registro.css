@@ -1,0 +1,220 @@
+body {
+    font-family: Ebrima, Caladea, Arial, sans-serif;
+    background-color: #4CAF50;
+    color: papayawhip;
+}
+body h5:first-child {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: unset;
+    z-index: -2;
+    color: lightgrey;
+}
+h5:first-child img {
+    width: 25vw;
+    height: auto;
+    pointer-events: none;
+}
+div.container1 h1 {
+    color: ghostwhite;
+}
+fieldset {
+    border: 2px solid gray;
+    border-radius: 2%;
+}
+fieldset legend {
+    text-align: center;
+    font-family: Ebrima, Caladea, Calibri, Arial, sans-serif;
+    color: white;
+}
+.flex-spaced {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+div.errores {
+    position: absolute;
+    top: 3%;
+    left: 70%;
+    width: 20vw;
+    max-width: 20%;
+    height: fit-content;
+
+    border-radius: 10%;
+    background-color: rgba(255, 255, 255, 0.6);
+    color: black;
+}
+.grayOut {
+    color: #464646;
+}
+div.container1 {
+    background-color: rgba(35, 42, 36, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
+    margin: 50px auto 0;
+}
+input[type=text], input[type=email], input[type=password], input[type=date], input[type=number] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+select {
+    width: 80%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: none;
+}
+input[type=number]:first-child {
+    margin-left: 10px;
+}
+
+input[type=date] {
+    resize: none;
+}
+input[type=submit] {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+input[type=reset] {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=reset]:hover {
+    background-color: #bebdbd;
+}
+.campo-error {
+    outline: 2px solid #fd2e1b;
+}
+.cargando-elems {
+    width: 250px;
+    height: auto;
+    text-align: center;
+    padding: 25%;
+}
+#divOculto1, #divOculto2 {
+    display: none;
+}
+#divOculto2 textarea {
+    min-width: 100%;
+    min-height: 15vh;
+}
+#divOculto2 a {
+    color: darkgray;
+}
+#divOculto2 a:hover {
+    color: #383838;
+}
+.provincia1:disabled, #provincia1:disabled {
+    color: white;
+}
+#resetRegistro {
+    display: none;
+    color: cornsilk;
+}
+#resetRegistro:hover {
+    color: #818181;
+    cursor: pointer;
+}
+.loading-gif {
+    display: none;
+    width: inherit;
+    height: inherit;
+}
+.loading-gif-pq-space {
+    width: 5vw;
+    height: auto;
+}
+.loading-gif-pq {
+    width: 5vw;
+    height: auto;
+    display: none;
+}
+.toggle-btn {
+    background-color: #fff;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    height: 40px;
+    position: relative;
+    width: 70px;
+}
+.elec-mode {
+    text-align: center;
+    margin-left: 1vw;
+}
+.elec-mode span.inactive {
+    color: rgba(171, 171, 171, 0.6);
+    transition: all 0.2s ease-in-out;
+}
+.elec-mode span.active {
+    color: #4498ee;
+    font-size: 110%;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+}
+.flex-nums {
+    display: flex;
+    flex-flow: row nowrap;
+}
+.flex-nums input[type='text'] {
+    width: 125px;
+    height: auto;
+}
+
+.toggle-btn-icon {
+    background-color: #4498ee;
+    border-radius: 30px;
+    height: 30px;
+    left: 5px;
+    position: absolute;
+    top: 5px;
+    transition: all 0.2s ease-in-out;
+    width: 30px;
+}
+
+.toggle-btn.active .toggle-btn-icon {
+    background-color: #4CAF50;
+    left: 35px;
+}
+
+/*ANIMACIONES*/
+@keyframes shake {
+    0% { transform: translateX(0); }
+    10% { transform: translateX(-5px); }
+    20% { transform: translateX(5px); background-color: #f57070;
+    }
+    30% { transform: translateX(-5px);
+        background-color: #badc77;
+    }
+    40% { transform: translateX(5px);}
+    50% { transform: translateX(-5px);}
+    60% { transform: translateX(5px);}
+    70% { transform: translateX(-5px);}
+    80% { transform: translateX(5px);}
+    90% { transform: translateX(-5px); background-color: #aafa7c;}
+    100% { transform: translateX(0); background-color: #cefc7e;}
+}

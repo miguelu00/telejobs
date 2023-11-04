@@ -1,0 +1,34 @@
+PANDAS
+df = pd.DataFrame(datos)
+
+df.dropna()
+df.fillna(50) #Reemplaza los valores vacíos con 50
+df.dropna(inplace = True) #Borrar los valores vacíos EN EL DATAFRAME que llama a la función
+
+#~~Por defecto, editamos los valores al mostrar y esto devuelve un dataframe, pero no edita el DF original.~~
+
+df.corr() #Busca correlación entre unos datos y otros:
+
+#__EXPLICACIÓN CORR()__ 
+#Devolverá un numero decimal entre 0 y 1; a más alejado del 0, mejor correlación
+#[Tener buena correlación simplemente significa que, en toda la tabla, el hecho de que
+aumente o disminuya un dato de una o varias columnas (según la indiquemos, o no) hará que también suba o baje, otro dato en la tabla].
+
+##Esto se puede usar para saber cuándo conviene cambiar datos, o simplemente borrar datos erróneos/vacíos, y así##
+
+df.plot() #Mostrará de forma gráfica un DataFrame; tiene como argumento 'kind'.
+# Kind of plots
+
+"""
+'line' - Forma de líneas (p. Defecto)
+'bar' - Forma de barra(s) vertical(es)
+'barh' - Forma de barra(s) horizontal(es)
+'hist' - Histograma
+'box' - Boxplot
+'kde' - Kernel Density Estimation
+'density' - Igual que kde
+'area' - Plot de área
+'pie' - Tarta/pie chart
+'scatter' - Dispersado (scatter, solo sirve con DataFrames)
+'hexbin' - HexBin plot (sólo en DataFrames tb)
+"""

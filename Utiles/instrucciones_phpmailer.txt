@@ -1,6 +1,0 @@
-1 - CMD -> haces cd hasta la ruta de tu proyecto
-2 - Escribes -> composer require phpmailer/phpmailer
-3 - Seguir el tutorial... https://mailtrap.io/blog/phpmailer-gmail/
-    [todo menos XOauth ese raro]
-
-mas rapidin/straightforward https://www.youtube.com/watch?v=GmCFeLhA-fA
