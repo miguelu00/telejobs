@@ -1,0 +1,141 @@
+body {
+    font-family: Ebrima, Caladea, Arial, sans-serif;
+    background: linear-gradient(20deg, rgb(155, 218, 29), rgb(203, 255, 228));
+    color: papayawhip;
+}
+form h1 {
+    color: ghostwhite;
+}
+fieldset {
+    border: 2px solid gray;
+}
+fieldset legend {
+    text-align: center;
+    font-family: Ebrima, Caladea, Calibri, Arial, sans-serif;
+    color: black;
+}
+.flex-spaced {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+body h5:first-child {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: unset;
+    z-index: -2;
+    color: lightgrey;
+}
+h5:first-child img {
+    width: 25vw;
+    height: auto;
+    pointer-events: none;
+}
+div.controls {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+form {
+    background-color: rgba(35, 42, 36, 0.65);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
+    margin: 50px auto 0;
+}
+input[type=text], input[type=email], input[type=password] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+input[type=submit] {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+input[type=reset] {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+input[type=reset]:hover {
+    background-color: #bebdbd;
+}
+i.fab {
+    font-size: 2vw;
+    color: gray;
+}
+i.fab:hover {
+    color: black;
+}
+.butt-login {
+    background-color: #1a7ada;
+    padding: 12px 20px;
+    border-radius: 4px;
+    transition: 0.3s ease-in-out;
+    width: fit-content;
+    height: fit-content;
+    color: black;
+}
+.butt-login:hover {
+    border: 1px solid black;
+    transition: 0.3s ease-in-out;
+    width: 2vw;
+    height: fit-content;
+}
+.toggle-btn {
+    background-color: #fff;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    height: 40px;
+    position: relative;
+    width: 70px;
+}
+.elec-mode {
+    text-align: center;
+    margin-left: 1vw;
+}
+.elec-mode span.inactive {
+    color: rgba(171, 171, 171, 0.6);
+    transition: all 0.2s ease-in-out;
+}
+.elec-mode span.active {
+    color: #4498ee;
+    font-size: 110%;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+}
+
+.toggle-btn-icon {
+    background-color: #4498ee;
+    border-radius: 30px;
+    height: 30px;
+    left: 5px;
+    position: absolute;
+    top: 5px;
+    transition: all 0.2s ease-in-out;
+    width: 30px;
+}
+
+.toggle-btn.active .toggle-btn-icon {
+    background-color: #4CAF50;
+    left: 35px;
+}

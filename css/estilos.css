@@ -1,0 +1,467 @@
+:root {
+    --bgColorDEM: rgb(155, 218, 29);
+    --bgColorEMP: rgb(22,195,255);
+    --fondoBusqDefault: url("../img/bg/busqueda.png");
+}
+::-moz-selection { /* Code for Firefox */
+    color: rgb(0, 179, 255);
+    background: rgb(255, 255, 34);
+}
+::selection {
+    color: rgb(0, 179, 255);
+    background: rgb(255, 255, 34);
+}
+@keyframes fondoDemandantes {
+    0%{
+        /*Esto funciona; coge el valor original sin importar qué valor sea*/
+    }
+    100%{
+        background-color: var(--bgColorDEM);
+    }
+}
+@keyframes fondoEmpresas {
+    0%{
+        /*Esto funciona ^^^^^^^^^ */
+    }
+    100%{
+        background-color: var(--bgColorEMP);
+    }
+}
+#userMenu1 {
+    width: fit-content;
+    height: auto;
+    z-index: 3;
+}
+
+body h5:first-child {
+    text-align: center;
+    margin: unset;
+    z-index: -2;
+    color: lightgrey;
+}
+h5:first-child img {
+    width: 25vw;
+    height: auto;
+    pointer-events: none;
+}
+body.primera-vista {
+    font-size: 2vw;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: rgba(19, 185, 0, 0.45);
+    background-color: rgb(180, 180, 180);
+    transition: 1.5s ease-in-out;
+    text-align: right;
+}
+body.primera-vista2 {
+    width: 100%;
+    height: 100%;
+    font-size: 21px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: rgba(19, 185, 0, 0.45);
+    background-color: rgb(180, 180, 180);
+    transition: 1.5s ease-in-out;
+    text-align: right;
+    overflow: scroll;
+}
+body.primera-vista dialog:not(.error, .abs-usermenu) {
+    color: #0B2A68;
+    font-size: 12pt;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    text-align: left;
+    word-wrap: normal;
+    transition: 0.2s ease-in-out;
+}
+body.primera-vista2 dialog {
+    color: #0B2A68;
+    font-size: 18pt;
+    text-align: left;
+    word-wrap: normal;
+    transition: 0.2s ease-in-out;
+
+    align-self: auto;
+}
+body.primera-vista2 .cont-Dialog {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-top: 15%;
+}
+body.primera-vista2 .cont-Dialog dialog {
+    max-width: 50%;
+    height: auto;
+}
+body.body-verFree {
+    /*Ver ofertas*/
+    background: var(--fondoBusqDefault) no-repeat fixed center;
+}
+.clear {
+    text-decoration: none;
+}
+dialog.error {
+    color: #b90000;
+    font-size: 12pt;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+dialog.errores {
+    position: absolute;
+    color: #b90000;
+    font-size: 12pt;
+
+    left: 70%;
+    top: 10%;
+}
+dialog.mensajes {
+    position: absolute;
+    color: #b90000;
+    font-size: 18pt;
+
+    left: 30%;
+    top: 20%;
+}
+dialog a {
+    margin-left: 0;
+    transition: 0.2s ease-in-out;
+}
+dialog a:hover {
+    margin-left: 3px;
+    transition: 0.2s ease-in-out;
+}
+.edit-toggle {
+    text-decoration: underline;
+    text-decoration-color: orangered;
+    color: orangered;
+    cursor: pointer;
+}
+.edit-toggle:hover {
+    text-decoration: underline;
+    text-decoration-color: #c53500;
+    color: #ff2f00;
+    cursor: pointer;
+}
+.emp:hover {
+    transition: 1.5s ease-in-out;
+}
+.dem:hover {
+    transition: 1.5s ease-in-out;
+}
+.flex-centered {
+    display: flex;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+}
+.flex-centered-col {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    height: auto;
+    justify-content: space-between;
+    align-content: flex-start;
+}
+.flex-centered-col-2 {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    height: auto;
+}
+.flex-centered-col button {
+    width: 100%;
+    height: 25px;
+    transition: all 0.2s;
+
+    font-family: "Leelawadee UI", Calibri, sans-serif;
+    margin-top: 20px;
+}
+.flex-centered-col button:nth-child(1) {
+    background-color: #4CAF50;
+}
+.flex-centered-col button:nth-child(1):hover {
+    background-color: #8bf18e;
+}
+.flex-centered-col button:nth-child(2) {
+    background-color: #fd2e1b;
+}
+.flex-centered-col button:nth-child(2):hover {
+    background-color: #ff7b70;
+}
+.flex-centered-col button:nth-child(3) {
+    background-color: #00bbff;
+}
+.flex-centered-col button:nth-child(3):hover {
+    background-color: #63ccff;
+}
+.flex-centered-col button:hover {
+    transition: all 0.2s;
+    height: 45px;
+    font-size: 110%;
+}
+.flex-centered-col button.active {
+    height: 45px;
+    font-size: 110%;
+}
+.flex-end {
+    float: right;
+    justify-content: flex-end;
+    justify-self: flex-end;
+}
+.hidden {
+    display: none;
+}
+.centrar {
+    justify-content: center;
+    align-content: center;
+    align-self: center;
+}
+.centrar-abs {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.centrar-rel {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.barra-nav ul li details a {
+    flex-flow: column nowrap;
+    font-size: 9px;
+}
+
+.botons {
+    display: flex;
+    flex-flow: row nowrap;
+    align-self: center;
+    scale: 100%;
+    justify-content: space-between;
+}
+.botons a {
+    padding: 15px;
+    border: 3px solid darkslateblue;
+    border-radius: 15px;
+    margin-right: 10px;
+    
+    text-align: center;
+    font: 1.8vw sans-serif;
+    width : fit-content;
+}
+.align-r-selfR {
+    text-align: right;
+    align-self: flex-end;
+    align-items: end;
+}
+.med-sz {
+    font-size: medium;
+}
+.google-login {
+    display: flex;
+    flex-flow: row nowrap;
+
+    border: 2px solid wheat;
+    border-radius: 20px;
+
+    align-self: center;
+    justify-content: space-between;
+    vertical-align: center;
+
+    width: fit-content;
+    height: auto;
+    background-color: rgba(255, 255, 255, 0.41);
+    transition: 0.2s ease-in-out;
+    margin-top: 20px;
+    padding-top: 30px;
+
+    font-size: 1.9vw;
+}
+.google-login a {
+    text-align: center;
+    padding: 25px 10px 10px 10px;
+    font-family: Arial, Magneto, sans-serif;
+
+    margin-top: -12%;
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+    text-decoration: none;
+}
+.google-login:hover {
+    scale: 110%;
+    background-color: rgba(255, 252, 128, 1);
+    transition: 0.2s ease-in-out;
+}
+.grayOut {
+    color: gray;
+}
+.orange {
+    color: orangered;
+}
+.paginas-div {
+    border: 2px solid burlywood;
+    max-width: 50%;
+    border-radius: 20px;
+
+    background-color: rgba(111, 227, 121, 0.6);
+}
+.paginas-div ul {
+    display: flex;
+    flex-flow: row wrap; /*Necesitamos wrapping si hay muchas páginas*/
+    justify-content: flex-start;
+    width: 100%;
+}
+.paginas-div ul li {
+    list-style: none;
+
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    text-align: center;
+    color: #0fa5fd;
+}
+.paginas-div ul li a {
+    width: 100%;
+    height: 100%;
+
+    background-color: lightskyblue;
+}
+.paginas-div ul li a.active {
+    color: #00e5ff;
+    background-color: #00416e;
+    font-weight: bold;
+}
+.logout-btn {
+    color: red;
+    text-align: right;
+    float: end;
+    padding: 5px;
+    text-decoration: none;
+    border: 2px solid lightcoral;
+    border-radius: 15px;
+
+    background-color: rgba(55, 201, 227, 0.63);
+}
+.logout-btn:hover {
+    background-color: #0071a1;
+    color: #fd2e1b;
+    text-decoration: none;
+}
+.offer-status {
+    font-family: "Leelawadee UI", Marguerite, sans-serif;
+    background-color: #ffff93;
+}
+.red {
+    color: red;
+    font-weight: bold;
+}
+span.md-text {
+    font: 30px Calibri;
+}
+.spinner1 label {
+    border-radius: 15px;
+    padding: 5px;
+    min-width: 60px;
+    text-align: left;
+}
+.spinner1 input[type=number] {
+    border-radius: 15px;
+    padding: 5px;
+    max-width: 60px;
+    text-align: center;
+}
+
+.emp {
+    background-color: rgba(95, 158, 160, 0.636);
+    color: black;
+    text-decoration: none;
+    transition: 0.2s ease-out;
+    opacity: 0.6;
+}
+.emp:hover {
+    background-color: rgb(117, 218, 241);
+    transition: 0.2s ease-in;
+    scale: 110%;
+    opacity: 1;
+}
+.dem {
+    background-color: rgba(49, 194, 49, 0.63);
+    color: black;
+    text-decoration: none;
+    transition: 0.2s ease-out;
+    opacity: 0.6;
+}
+.dem:hover {
+    background-color: rgb(58, 162, 24);
+    transition: 0.2s ease-in;
+    scale: 110%;
+    opacity: 1;
+}
+.abs-usermenu {
+    /*display: none:*/
+    width: fit-content;
+    height: auto;
+    border-radius: 10px;
+    border: 3px solid rgb(131, 131, 0);
+    margin: unset;
+    padding: 0 25px 0 0;
+}
+.abs-usermenu ul {
+    list-style: none;
+}
+.abs-usermenu ul li {
+    margin:unset;
+    cursor: pointer;
+    width: 100%;
+    padding: 0;
+}
+.abs-usermenu ul li:hover:not(.red-link) {
+    background-color: #afafaf;
+    font-weight: bold;
+}
+.abs-usermenu pre {
+    margin-left: 10px;
+}
+ul.barra-nav li details summary {
+    font-size: small;
+}
+.red-link {
+    color: red;
+}
+.red-link:hover {
+    background-color: #fd2e1b;
+    color: black;
+    font-weight: bold;
+}
+.img-nav-pq {
+    width: 20px;
+    height: auto;
+    padding-right: 4px;
+    padding-left: 3px;
+}
+.icon-pq {
+    color: rgba(0, 0, 0, 0.67);
+    font-size: 1vw;
+    padding-right: 4px;
+    padding-left: 3px;
+}
+.tj-font {
+    font-family: "Gill Sans MT", Arial, sans-serif;
+}
+.txt-pq {
+    font-size: 1vw;
+    font-family: KacstBook, "Arial Rounded MT Bold", sans-serif;
+    text-align: right;
+    text-decoration: none;
+}
+.warn {
+    color: #863b00;
+    background-color: rgba(168, 168, 168, 0.7);
+}
