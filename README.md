@@ -8,6 +8,7 @@ Aplicación web para gestionar ofertas de trabajo.
 Pueden generar su propio CURRICULUM VITAE, mediante plantillas de HTML y un editor de texto simple (WIP)
 
 · Sistema de CONFIGURACIÓN, con datos tomados por Sesión PHP + AJAX
+
 · Simplificación de toma de datos de Base de Datos (a través de Sesiones PHP y control de UPDATEs en MySQL)
 
 # Qué hay por añadir
@@ -15,4 +16,11 @@ Pueden generar su propio CURRICULUM VITAE, mediante plantillas de HTML y un edit
 - CRUD Admin => INSERTAR, Editar y Eliminar EMP&DEM
 
 <h3>DEMANDANTES</h3>
-- Forma de ver EMPRESAS, búsqueda por campo de texto
+- Forma de ver EMPRESAS, búsqueda por campo de texto/ofertas antes,después de X fecha...
+- En la página principal, aparecerán datos de las EMPRESAS RELACIONADAS con sus Habilidades
+- Notificaciones
+
+<h3>EMPRESAS</h3>
+- Hacer que una empresa pueda subir ofertas de Empleo
+- Pedir habilidades por tipo en dichas ofertas de trabajo, y capacidad de crear habilidades (pref. de forma Simple)
+- Ver perfiles de DEMANDANTES 
