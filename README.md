@@ -16,10 +16,12 @@ Pueden generar su propio CURRICULUM VITAE, mediante plantillas de HTML y un edit
 - CRUD Admin => INSERTAR, Editar y Eliminar EMP&DEM
 
 <h3>DEMANDANTES</h3>
+- Permitir en REGISTRO, subir sus CV en formato .PDF
+
 - Forma de ver EMPRESAS, búsqueda por campo de texto/ofertas antes,después de X fecha...
 
 - En la página principal, aparecerán datos de las EMPRESAS RELACIONADAS con sus Habilidades
-- 
+
 - Notificaciones
 
 <h3>EMPRESAS</h3>
@@ -27,4 +29,4 @@ Pueden generar su propio CURRICULUM VITAE, mediante plantillas de HTML y un edit
 
 - Pedir habilidades por tipo en dichas ofertas de trabajo, y capacidad de crear habilidades (pref. de forma Simple)
 
-- Ver perfiles de DEMANDANTES 
+- Ver perfiles de DEMANDANTES // descargar sus CURRÍCULUMS
