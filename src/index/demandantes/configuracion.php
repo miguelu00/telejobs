@@ -39,6 +39,7 @@
             <a href="#" id="openMenu2"><i class="fa fa-info-circle"></i> Sobre TELEJOBS</a>
             <a href="#" id="openMenu3" class="danger-link"><i class="fa fa-sign-out"></i> ELIMINAR CUENTA</a>
         </div>
+        <!--Cada menú tendrá su DIV, y clase enumerada; al añadir menús habrá que tener en cuenta esto.-->
         <div id="menu">
             <div class="menu1">
                 <h2 id="title">Email &amp; Contacto</h2>
@@ -46,6 +47,8 @@
                 <label for="email">Dirección de Correo <span class="orange">*</span></label><br>
                 <input required aria-required="true" type="email" id="email" name="email" value="<?php echo $_SESSION['userData']['email'] ?>" disabled/>&nbsp; <a class="editToggle">Cambiar</a>
                 <br>
+                <label for="telefono">Teléfono de Empresa</label>
+                <input required aria-required="true" type="number" id="tlf" name="tlf" value="<?php echo $_SESSION['userData']['tlf'] ?>" disabled/>&nbsp; <a class="editToggle">Cambiar</a>
                 <div class="warn danger-box">
                     <p>*<i class="fa fa-exclamation-triangle"></i> ATENCIÓN: Si modifica su correo electrónico, YA NO PODRÁ INICIAR SESIÓN CON SU OTRO CORREO HASTA QUE LO VUELVA A CAMBIAR. Proceda con cautela</p>
                 </div>

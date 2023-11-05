@@ -22,70 +22,76 @@
         </li>
     </ul>
     <br>
-    <h2>EMPRESAS</h2>
-    <table class="tabla-datos" id="tablaEMPRESAS">
-        <th>ID</th>
-        <th>email</th>
-        <th>passwd</th>
-        <th>Foto de perfil</th>
-        <th>Nombre Empresa</th>
-        <th>Nombre_propio</th>
-        <th>Apellidos</th>
-        <th>Actividad Principal</th>
-        <th>Descripción</th>
-        <th>Teléfono</th>
-        <th>Código Postal</th>
-        <th>Dirección</th>
-        <th>Municipio Sede</th>
-        <th>CIF</th>
-        <th>Es una ETT</th>
-        <th>Cuenta confirmada</th>
-        <th>Fecha_Apertura</th>
-        <th>Fecha_Inscripción</th>
-        <th>---</th>
-        <?php
-             mostrarDatosTabla("empresas");
-        ?>
-    </table>
-
-    <br>
-    <h2>DEMANDANTES</h2>
-    <table class="tabla-datos" id="tablaDEMANDANTES">
-        <th>ID</th>
-        <th>Skill_IDs</th>
-        <th>Experiencia</th>
-        <th>Nombre</th>
-        <th>Apellidos</th>
-        <th>Fecha de Nacimiento</th>
-        <th>Teléfono</th>
-        <th>Código Postal</th>
-        <th>Municipio</th>
-        <th>E-mail</th>
-        <th>Passwd</th>
-        <th>Foto de perfil</th>
-        <th>DNI/NIF</th>
-        <th>CV_Visible</th>
-        <th>Confirmado</th>
-        <th>Fecha de Inscripción</th>
-        <th>---</th>
-        <?php
-             mostrarDatosTabla("demandantes");
-        ?>
-    </table>
-    
 <a href="#openModal" title="Editar...">
     <i style="font-size: 36px;" class="fas fa-edit"></i> Editar...
 </a>
+    <br>
+    <div class="">
+        <div class="tablaCrud">
+        <h2>EMPRESAS</h2>
+        <table class="tabla-datos" id="tablaEMPRESAS">
+            <th>ID</th>
+            <th>email</th>
+            <th>passwd</th>
+            <th>Foto de perfil</th>
+            <th>Nombre Empresa</th>
+            <th>Nombre_propio</th>
+            <th>Apellidos</th>
+            <th>Actividad Principal</th>
+            <th>Descripción</th>
+            <th>Teléfono</th>
+            <th>Código Postal</th>
+            <th>Dirección</th>
+            <th>Municipio Sede</th>
+            <th>CIF</th>
+            <th>Es una ETT</th>
+            <th>Cuenta confirmada</th>
+            <th>Fecha_Apertura</th>
+            <th>Fecha_Inscripción</th>
+            <th>---</th>
+            <?php
+                mostrarDatosTabla("empresas");
+            ?>
+        </table>
+        </div>
+        <br>
+        <div class="tablaCrud">
+            <h2>DEMANDANTES</h2>
+            <table class="tabla-datos" id="tablaDEMANDANTES">
+                <th>ID</th>
+                <th>Skill_IDs</th>
+                <th>Experiencia</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Teléfono</th>
+                <th>Código Postal</th>
+                <th>Municipio</th>
+                <th>E-mail</th>
+                <th>Passwd</th>
+                <th>Foto de perfil</th>
+                <th>DNI/NIF</th>
+                <th>CV_Visible</th>
+                <th>Confirmado</th>
+                <th>Fecha de Inscripción</th>
+                <th>---</th>
+                <?php
+                    mostrarDatosTabla("demandantes");
+                ?>
+            </table>
+        </div>
+    </div>
     <script src="../js/adminCRUD.js"></script>
 </body>
 </html>
 
 <?php
     function mostrarDatosTabla($tipoUser) {
-        $select = []; $hayDatos = false; $singleRow = false;
+        $select = []; $hayDatos = false; $singleRow = false; $empresas = false;
         switch ($tipoUser) {
             case "empresas":
                 $select = select("empresas", "*");
+                $empresas = true;
                 if ($select['id_EMP'] != null) {
                     $singleRow = true;
                 }
@@ -113,6 +119,7 @@
                 }
                 //Creamos botones, por cada fila, para Editar/Eliminar la entrada actual (por ID)
                 if ($hayDatos) {
+                    $tipo = ($empresas) ? "E" : "D";
                     echo "<td><button type='button' id='editar_" . $id . "' class='edit'>" .
                     "<img src='../img/guardar.png'/>" . "<pre>Editar...</pre>" .
                     "</button>";
@@ -135,10 +142,11 @@
                 }
                 echo "<td>". $data ."</td>";
             }
-            echo "<br><button type='button' id='editar_" . $id . "' class='edit'>" .
+            $tipo = ($empresas) ? "E" : "D";
+            echo "<br><button type='button' id='editar_" . $id . "' class='btnCrud edit'>" .
             "<pre>Editar...</pre>" .
             "</button>";
-            echo "<br><button type='button' id='borrar_" . $id . "' class='borrar'>" .
+            echo "<br><button type='button' id='borrar_" . $id . "' class='btnCrud borrar'>" .
             "<pre>Borrar...</pre>" .
             "</button>";
         }

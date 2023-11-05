@@ -72,6 +72,7 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
 <script>
+    //Variables timeout, para hacer que el fondo cambie progresivamente según el botón sobre el que posemos el Ratón.
     let tout1,
     aBotons = document.querySelectorAll('div.botons a');
 
