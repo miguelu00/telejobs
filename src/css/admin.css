@@ -6,21 +6,35 @@ body {
     background: var(--bgImage) fixed center;
 }
 
+body > div.mainContainer {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
 .tabla-datos {
     border-radius: 15%;
     border-color: brown;
+    border-style: solid;
     border-collapse: collapse;
 }
 
-.tabla-datos hr {
+.tabla-datos th {
     background-color: rgb(18, 18, 131);
     color: white;
+    border-right: 1px solid gray;
 }
 
 .tabla-datos tr td {
+    border:rgb(105, 0, 0) solid 2px;
+    padding-left: 10px;
     background-color: black;
-    color: cadetblue;
+    color: white;
     border: double solid gray;
+    /* fix para los campos de Passwd */
+    width: min-content;
+    max-width: 200px;
+    overflow: hidden;
+    height: calc(fit-content + 10px);
 }
 
 .tabla-datos td button {

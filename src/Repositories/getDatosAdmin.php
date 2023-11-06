@@ -4,32 +4,25 @@
         die(-1);
     }
 
+    if (!isset($_POST['id'])) {
+        $id = "%";
+    } else {
+        $id = $_POST["id"];
+    }
+
     switch ($_POST['select']) {
         case "empresas":
-            $htmlString = mostrarDatosTabla(select("empresas"));
+            $datosResult = select("empresas", '*', "id_EMP=" . $id);
             echo json_encode(array(
                 "message" => "success",
-                "data" => $htmlString
+                "data" => $datosResult
             ));
             break;
         case "demandantes":
-            $htmlString = mostrarDatosTabla(select("demandantes"));
+            $datosResult = select("demandantes", '*', "id_DEM=" . $id);
             echo json_encode(array(
                 "message" => "success",
-                "data" => $htmlString
+                "data" => $datosResult
             ));
             break;
-    }
-
-    function mostrarDatosTabla($datos) {
-        $html = "";
-        foreach ($datos as $fila) {
-            $html .= "<tr>";
-            foreach ($fila as $key => $value) {
-                $html .= "<td>" . $value . "</td>";
-            }
-            $html .= "</tr>";
-        }
-
-        return $html;
     }

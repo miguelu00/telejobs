@@ -1,9 +1,11 @@
 <?php
 
 require "../Utiles/mySQL.php";
-class Demandante {
+class Demandante implements CRUD {
     private $skill_ids;
     private $experiencia;
+	private $nombre;
+	private $apellidos;
     private $fechaNac;
     private $tlf;
     private $codPostal;
@@ -19,13 +21,6 @@ class Demandante {
     
     //+ métodos para inscribir / sacar datos / borrar / ver cuanto tiempo lleva logeado...
 
-    public function getId(){
-		return $this->$id;
-	}
-
-	public function setId_DEM($id_DEM){
-		$this->id_DEM = $id_DEM;
-	}
 
 	public function getNombre(){
 		return $this->nombre;
@@ -145,5 +140,17 @@ class Demandante {
 
 	public function setFecha_inscripcion($fecha_inscripcion){
 		$this->fecha_inscripcion = $fecha_inscripcion;
+	}
+
+	public function insertar($nombreTabla, $campos, $valores) {
+
+	}
+
+	public function updatear($nombreTabla, $valores, $id) {
+		
+	}
+
+	public function borrar( $nombreTabla, $id) {
+
 	}
 }

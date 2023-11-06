@@ -1,4 +1,6 @@
 jQuery(function() {
+
+    /*
     let tablaE = document.querySelector("#tablaEMPRESAS");
     let tablaD = document.querySelector("#tablaDEMANDANTES");
 
@@ -6,10 +8,20 @@ jQuery(function() {
     var datosEmp = obtenerDatos("empresas");
     var datosDem = obtenerDatos("demandantes");
 
-//Bucles para construir las tablas con los datos de ambas entidades Empresas y Demandantes
+    */
     
-        
-    
+    let campoCodPostalDem = document.querySelector("#cPostalDem");
+    campoCodPostalDem.on("keyup", function(e) {
+        darProvincia($(this).val());
+    });
+    let campoCodPostalEmp = document.querySelector("#cPostalEmp");
+    campoCodPostalEmp.on("keyup", function(e) {
+        darProvincia($(this).val());
+    });
+
+    $("#provincia1").on("click", function() {
+        alert("Escriba el Código postal en el campo de arriba,\ny se actualizará este campo adecuadamente.");
+    });
 
     function editarCampos(e) {
         //Recojo el ID del objeto a Editar de la fila
@@ -58,5 +70,65 @@ jQuery(function() {
                 return (JSON.parse(datosRecibidos)).data;
             }
         })
+    }
+
+    //Petición a servicio web del Catastro Nacional a través de AJAX, a esta función se le llama directamente desde *darProvincia(cpostal)*
+    function setMunicipios(provincia) {
+        $.ajax('pedirMunip.php', { //Petición AJAX al fichero .PHP que se conectará al servicio online del Catastro (municipios)
+            type: "POST",
+            dataType: 'json', //si no lo especificamos, jquery intentará adivinar el tipo
+            data: {
+                prov: provincia
+            },
+            beforeSend: function () {
+                $("#loadMuns").fadeIn();
+            },
+            complete: function () {
+                setTimeout(function() {
+                    $("#loadMuns").fadeOut();
+                }, 1000);
+            },
+            success: function (data) {
+                $(".listaMunips").each(function(e) {
+                    $(this).html(''); //Vaciamos la lista de municipios; en esta función usamos identificador por CLASE para que los elementos duplicados también presenten estos datos
+                });
+                for (const provi of data) { //Rellenamos la lista con los datos del Catastro (obtenidos a través del fichero .PHP)
+                    document.querySelectorAll(".listaMunips").forEach(function(elem) {
+                        elem.innerHTML += '<option>' + provi + '</option>';
+                    });
+                }
+            }
+        })
+    }
+
+    //A partir de los dos primeros núms. del Codigo postal (prefijo), sacamos las provincias que le corresponden a dichos número.
+    function darProvincia(cpostal) {
+        const cp_provincias = {
+            1: "\u00C1lava", 2: "Albacete", 3: "Alicante", 4: "Almer\u00EDa", 5: "\u00C1vila",
+            6: "Badajoz", 7: "Baleares", 8: "Barcelona", 9: "Burgos", 10: "C\u00E1ceres",
+            11: "C\u00E1diz", 12: "Castell\u00F3n", 13: "Ciudad Real", 14: "C\u00F3rdoba", 15: "Coruña",
+            16: "Cuenca", 17: "Gerona", 18: "Granada", 19: "Guadalajara", 20: "Guip\u00FAzcoa",
+            21: "Huelva", 22: "Huesca", 23: "Ja\u00E9n", 24: "Le\u00F3n", 25: "L\u00E9rida",
+            26: "La Rioja", 27: "Lugo", 28: "Madrid", 29: "M\u00E1laga", 30: "Murcia",
+            31: "Navarra", 32: "Orense", 33: "Asturias", 34: "Palencia", 35: "Las Palmas",
+            36: "Pontevedra", 37: "Salamanca", 38: "Santa Cruz de Tenerife", 39: "Cantabria", 40: "Segovia",
+            41: "Sevilla", 42: "Soria", 43: "Tarragona", 44: "Teruel", 45: "Toledo",
+            46: "Valencia", 47: "Valladolid", 48: "Vizcaya", 49: "Zamora", 50: "Zaragoza",
+            51: "Ceuta", 52: "Melilla"
+        };
+        if (cpostal.length == 5 && cpostal <= 52999 && cpostal >= 1000) {
+            $(".provincia1").each(function(e) {
+                $(this).val(cp_provincias[parseInt(cpostal.substring(0, 2))]);
+            });
+            //También introducimos una lista de municipios de la provincia sugerida (AJAX + servicio web catastro)
+            setMunicipios($(".provincia1").val());
+        } else {
+            $(".provincia1").each(function() {
+                $(this).val("---");
+            });
+            $(".listaMunips").each(function(){
+                $(this).html("");
+            });
+        }
     }
 });

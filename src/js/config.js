@@ -1,6 +1,6 @@
-//Pagina configuración
+//Pagina configuración - se comparte tanto en la página de Empresa como de Demandante
 
-$(document).ready(function() {
+jQuery(function() {
     var menuMainContainer = document.querySelector("#menu"),
     opcionesBar = $("div.menuOpciones a"),
         TIPOUSER = document.querySelector("#tipoUser").value;
@@ -93,17 +93,20 @@ $(document).ready(function() {
                     editing = false;
                     return false;
                 }
-                if (confirm("De ahora en adelante, usará este correo para INICIAR SESIÓN. ¿Está seguro de cambiarlo?")) {
-                    //name del sibling -> Nombre del campo en BBDD ;; value del sibling -> valor a actualizar en ese campo NAME
-                    let result = guardarCambio("demandante", e.target.previousElementSibling.name, e.target.previousElementSibling.value);
-                    //Si se puede actualizar el campo, actualizamos el input de texto a este
-                    e.target.removeEventListener('click', e.event);
-                    e.target.innerHTML = "Editar...";
-                    e.target.previousElementSibling.disabled = true;
-                    e.target.innerHTML += '<i class="fa fa-check-square"></i>';
-                    e.target.addEventListener('click', enableEditar);
-                } else {
-                    return false;
+                //Aquí, según el ID del elemento hermano anterior, actualizaremos en BBDD una columna u otra.
+                switch(hermanoAnterior.id) {
+                    case "email":
+                    if (confirm("De ahora en adelante, usará este correo para INICIAR SESIÓN. ¿Está seguro de cambiarlo?")) {
+                        actualizarDatos(e);
+                    } else {
+                        return false;
+                    }
+                    break;
+                    case "tlf":
+                    if (confirm("¿Está seguro/a de cambiar el teléfono de contacto de su Empresa?")) {
+                        actualizarDatos(e);
+                    }
+                    break;
                 }
             } else {
                 //Mostrar fallo de validación HTML
@@ -113,11 +116,26 @@ $(document).ready(function() {
         e.target.previousElementSibling.addEventListener("keypress", clickPress);
     }
 
+    function actualizarDatos(e) {
+        //args.: TIPOUSUARIO, name del sibling -> Nombre del campo en BBDD, value del sibling -> valor a actualizar en ese campo NAME
+        let result = guardarCambio("demandante", e.target.previousElementSibling.name, e.target.previousElementSibling.value);
+        if (result) {
+            //Si se puede actualizar el campo, actualizamos el input de texto a este
+            e.target.removeEventListener('click', e.event);
+            e.target.innerHTML = "Editar...";
+            e.target.previousElementSibling.disabled = true;
+            e.target.innerHTML += '<i class="fa fa-check-square"></i>';
+            e.target.addEventListener('click', enableEditar);
+        }
+        
+    }
+
     function guardarCambio(tipoUser, campo, valor) {
+        //Recogemos email del Demandante/Empresa actual, para identificarlo en la tabla de la BBDD
+        var email = document.querySelector("#email");
         document.querySelectorAll("input[type=text]").forEach(function(elem) {
             elem.removeEventListener("keypress", clickPress);
         });
-        imgTemporal = previewFoto.attr("src");
         //Funcion AJAX para guardar datos
         let xhttp = new XMLHttpRequest();
         let formVirt = new FormData();

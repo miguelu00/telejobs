@@ -36,7 +36,7 @@ if (isset($_SESSION['user'])) {
     // Set the ClientSecret
     $gclient->setClientSecret($secret);
     // Set the Redirect URL after successful Login
-    $gclient->setRedirectUri('http://localhost/PROYECTO/index.php');
+    $gclient->setRedirectUri('http://localhost/PROYECTO/telejobs/src/index.php');
 
     // Adding the Scope (los datos que queremos recoger del usuario: email y perfil de Google)
     $gclient->addScope('email');

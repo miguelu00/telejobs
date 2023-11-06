@@ -1,4 +1,4 @@
-$(document).ready(function() {
+jQuery(function() {
     // REGISTRO - Manejar selector modo de registro, validar campos
     const toggleBtn = document.querySelector('.toggle-btn');
     let activo = false, sigPagina = false;
@@ -35,7 +35,7 @@ $(document).ready(function() {
         }
         cambiarClaseTxt(textoBtn);
     });
-    $(document).ready(function() {
+    jQuery(function() {
         cargarHabilidades();
         cargarActividades();
     });
@@ -113,7 +113,7 @@ $(document).ready(function() {
     }
 
     function applyNIFEvento() {
-        $("#nif1").on('keyup', function() {
+        $("#nif1").on("keyup", function() {
             let valor = $(this).val();
             if (!isNaN(parseInt(valor)) && valor.length == 8) {
                 valor = parseInt($(this).val());
@@ -123,14 +123,14 @@ $(document).ready(function() {
     }
 
 //hacer los radio input 'deseleccionables'
-    $('input[type="radio"]').mousedown(function() {
+    $('input[type="radio"]').on("mousedown", function() {
         if (this.checked) {
-            $(this).mouseup(function(e) {
+            $(this).on("mouseup",function(e) {
                 var radio = this;
                 setTimeout(function() {
                     radio.checked = false;
                 }, 5);
-                $(this).unbind('mouseup');
+                $(this).off("mouseup");
             });
         }
     });
