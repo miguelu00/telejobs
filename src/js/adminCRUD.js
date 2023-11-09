@@ -23,7 +23,7 @@ jQuery(function() {
         alert("Escriba el Código postal en el campo de arriba,\ny se actualizará este campo adecuadamente.");
     });
 
-    
+    let consultaDems = obtenerDatos("demandantes");
 
 
     /**
@@ -36,24 +36,56 @@ jQuery(function() {
         let accion = e.target.id.substring(1, 6);
         let id = parseInt(e.target.id.substring(7));
         let filaTDs = e.target.parentElement.parentElement.children;
-        filaTDs.splice(0, 1); //Evitar primeros botones
 
         switch (accion) {
             case "editar":
-                let arrayTDs = Array.from(filaTDs);
-                arrayTDs.splice(0, 2);//Eliminar los dos primeros elementos (botones Editar/Eliminar) antes de iterar
-            for (td of filaTDs) {
-            //Sacar valor y poner en el formulario del Modal de edición correspondiente
                 
-            }
+                for (td of filaTDs) {
+                //Sacar valor y poner en el formulario del Modal de edición correspondiente
+                    let datosArray = sacarDatosID(tipoElemento, id);
+                }
         }
         
     }
     
     //tipoElemento -> si se trata de Empresa (E) ó Demandante (D)
-    function leerTabla(tipoElemento) {
-        if (tipoElemento == "D") {
+    function sacarDatosID(tipoElemento, id) {
+        //Si el ID es -1 (menos uno), sacar todos los datos de la tabla. En caso contrario, los del ID pasado
+        let conID = (id != -1) ? true : false;
+        if (conID) {
+            if (tipoElemento == "D") {
+                let datos = obtenerDatos("demandantes", id);
+                if (datos.length > 0 && datos.length == 1) {
+                    return datos;
+                } else {
+                    return null;
+                }
+            }
+            if (tipoElemento == "E") {
+                let datos = obtenerDatos("empresas", id);
+                if (datos.length > 0 && datos.length == 1) {
+                    return datos;
+                } else {
+                    return null;
+                }
+            }
+        }
 
+        if (tipoElemento == "D") {
+            let datos = obtenerDatos("demandantes");
+            if (datos.length > 0 && datos.length == 1) {
+                return datos;
+            } else {
+                return null;
+            }
+        }
+        if (tipoElemento == "E") {
+            let datos = obtenerDatos("empresas");
+            if (datos.length > 0 && datos.length == 1) {
+                return datos;
+            } else {
+                return null;
+            }
         }
     }
 
@@ -76,6 +108,37 @@ jQuery(function() {
             type : "POST",
             data : {
                 "select": tabla
+            },
+            success : function(datosRecibidos){
+                if (datosRecibidos === -1) {
+                    //mostrarError(""SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
+                    //" de Base de Datos no esté activo." + 
+                    //" Si el problema persiste, póngase en contacto con un" +
+                    //" Administrador del Sistema ó con el desarrollador");
+                    console.log("SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
+                    " de Base de Datos no esté activo." + 
+                    " Si el problema persiste, póngase en contacto con un" +
+                    " Administrador del Sistema ó con el desarrollador");
+                    alert("SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
+                    " de Base de Datos no esté activo." + 
+                    " Si el problema persiste, póngase en contacto con un" +
+                    " Administrador del Sistema ó con el desarrollador");
+                    return;
+                }
+
+
+                return (JSON.parse(datosRecibidos)).data;
+            }
+        });
+    }
+
+    //Poblar datos de las dos tablas: Empresas y Demandantes (usando AJAX)
+    function obtenerDatos(tabla, id) {
+        $.ajax("getDatosAdmin.php", {
+            type : "POST",
+            data : {
+                "select": tabla,
+                "id": id
             },
             success : function(datosRecibidos){
                 if (datosRecibidos === -1) {

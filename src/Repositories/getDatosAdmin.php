@@ -5,21 +5,21 @@
     }
 
     if (!isset($_POST['id'])) {
-        $id = "%";
+        $id = "'%'";
     } else {
         $id = $_POST["id"];
     }
 
     switch ($_POST['select']) {
         case "empresas":
-            $datosResult = select("empresas", '*', "id_EMP=" . $id);
+            $datosResult = select("empresas", '*', "id_EMP LIKE " . $id);
             echo json_encode(array(
                 "message" => "success",
                 "data" => $datosResult
             ));
             break;
         case "demandantes":
-            $datosResult = select("demandantes", '*', "id_DEM=" . $id);
+            $datosResult = select("demandantes", '*', "id_DEM LIKE " . $id);
             echo json_encode(array(
                 "message" => "success",
                 "data" => $datosResult

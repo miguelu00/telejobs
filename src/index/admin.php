@@ -316,5 +316,8 @@
             }
             echo "</tr>";
         }
+
+        // TODO - INVESTIGAR AUTOLOAD PARA ESTO, E IMPLEMENTAR CLASES//POO EN EL PROYECTO :(
+        //$demand = new Demandante();
     }
 ?>
