@@ -23,14 +23,37 @@ jQuery(function() {
         alert("Escriba el Código postal en el campo de arriba,\ny se actualizará este campo adecuadamente.");
     });
 
+    
+
+
+    /**
+     * Listener para el evento en que hagamos clic en un botón de la tabla,
+     * eligirá qué hacer dependiendo del ID que tenga (incluye el ID del elemento y su acción)
+     */
     function editarCampos(e) {
         //Recojo el ID del objeto a Editar de la fila
-        let id = parseInt(e.target.id.substring(6));
-        let fila = e.target.parentElement.parentElement.children;
+        let tipoElemento = e.target.id.substring(0,1);
+        let accion = e.target.id.substring(1, 6);
+        let id = parseInt(e.target.id.substring(7));
+        let filaTDs = e.target.parentElement.parentElement.children;
+        filaTDs.splice(0, 1); //Evitar primeros botones
 
-        for (td of fila) {
-            //Sacar valor y poner en un Input
-            
+        switch (accion) {
+            case "editar":
+                let arrayTDs = Array.from(filaTDs);
+                arrayTDs.splice(0, 2);//Eliminar los dos primeros elementos (botones Editar/Eliminar) antes de iterar
+            for (td of filaTDs) {
+            //Sacar valor y poner en el formulario del Modal de edición correspondiente
+                
+            }
+        }
+        
+    }
+    
+    //tipoElemento -> si se trata de Empresa (E) ó Demandante (D)
+    function leerTabla(tipoElemento) {
+        if (tipoElemento == "D") {
+
         }
     }
 

@@ -20,16 +20,16 @@
         <li class="logo-emp">
             <a href="index.php">
                 <!--INSERTAR IMAGEN CUSTOM PARA ADMIN. TELEJOBS-->
-                <img id="img-logo" class="img-nav no-border" src="" alt="logoEmp"/>
+                <img id="img-logo img-pq" class="img-nav no-border" src="../img/icons/AdminBanner_tj.png" alt="logoTJ"/>
             </a>
         </li>
     </ul>
     <br>
     <div class="mainContainer">
-    <a href="#openModalDem" title="Editar..." class="hidden">
+    <a href="#openModalDem" id="mostrarEditDEM" title="Editar..." class="hidden">
         <i style="font-size: 36px;" class="fas fa-edit"></i> Editar Demandantes...
     </a>
-    <a href="#openModalEmp" title="Editar..." class="hidden">
+    <a href="#openModalEmp" id="mostrarEditEMP" title="Editar..." class="hidden">
         <i style="font-size: 36px;" class="fas fa-edit"></i> Editar Empresas...
     </a>
     <!-- MODALES para INSERTAR DEMANDANTES/EMPRESAS -->
@@ -43,12 +43,12 @@
                     <tbody>
                         <tr>
                             <td>ID DEMANDANTE: </td>
-                            <td><input type="text" name="idDem" disabled aria-disabled="true" required aria-required="true"/></td>
+                            <td><input id="idDem" type="text" name="idDem" disabled aria-disabled="true" required aria-required="true"/></td>
                         </tr>
                         <tr>
                             <td>IDs de HABILIDADES: </td>
                             <td>
-                                <select name="habilidadesDem" required aria-required="true">
+                                <select id="habilidadesDem" name="habilidadesDem" required aria-required="true">
                                     <!--Rellenar este select con AJAX, los value serán los ID de Habilidades-->
                                 </select>
                             </td>
@@ -77,8 +77,8 @@
                             <td>Provincia y Municipio: </td>
                             <td><input type="text" class="provincia1" disabled id="provincia1" name="provincia1" required aria-required="true"/>
                                 <select id="municipioDem" name="municipioDem" class="listaMunips">
-
-                                </select> &nbsp; <div class="loader img-pq" id="loadMuns" name="loadMuns"></div>
+                                    
+                                </select> <!--&nbsp; <div class="loader img-pq" id="loadMuns" name="loadMuns"></div>-->
                             </td>
                         </tr>
                         <tr>
@@ -224,19 +224,12 @@
         <table class="tabla-datos" id="tablaEMPRESAS">
             <th>ID</th>
             <th>email</th>
-            <th>passwd</th>
-            <th>Foto de perfil</th>
             <th>Nombre Empresa</th>
             <th>Nombre_propio</th>
-            <th>Apellidos</th>
             <th>Actividad Principal</th>
-            <th>Descripción</th>
             <th>Teléfono</th>
             <th>Código Postal</th>
-            <th>Dirección</th>
-            <th>Municipio Sede</th>
             <th>CIF</th>
-            <th>Es una ETT</th>
             <th>Cuenta confirmada</th>
             <th>Fecha_Apertura</th>
             <th>Fecha_Inscripción</th>
@@ -251,18 +244,14 @@
             <table class="tabla-datos" id="tablaDEMANDANTES">
                 <th colspan="2"></th>
                 <th>ID</th>
-                <th>Skill_IDs</th>
-                <th>Experiencia</th>
-                <th>Nombre</th>
+                <th>E-mail</th>
+                <th>DNI/NIF</th>
                 <th>Apellidos</th>
+                <th>Nombre</th>
                 <th>Fecha de Nacimiento</th>
                 <th>Teléfono</th>
                 <th>Código Postal</th>
                 <th>Municipio</th>
-                <th>E-mail</th>
-                <th>Passwd</th>
-                <th>Foto de perfil</th>
-                <th>DNI/NIF</th>
                 <th>CV_Visible</th>
                 <th>Confirmado</th>
                 <th>Fecha de Inscripción</th>
@@ -282,7 +271,7 @@
         switch ($tipoUser) {
             case "empresas":
                 $id = "id_EMP";
-                $select = select("empresas", "*");
+                $select = select("empresas", "id_EMP, email, nombre, nombre_Prop, actividad_p, tlf, cPostal, CIF, confirm, f_apertura, f_inscripcion");
                 $empresas = true;
                 if (isset($select["id_EMP"])) {
                     $singleRow = true;
@@ -290,7 +279,7 @@
                 break;
             case "demandantes":
                 $id = "id_DEM";
-                $select = select("demandantes", "*");
+                $select = select("demandantes", "id_DEM, email, NIF, apellidos, nombre, fechaNac, tlf, cPost, munip, cv_visible, confirm, f_inscripcion");
                 if (isset($select["id_DEM"])) {
                     $singleRow = true;
                 }
@@ -298,8 +287,7 @@
         }
         $tipo = ($empresas) ? "E" : "D";
         if (!$singleRow) {
-            
-            
+
             foreach ($select as $row) {
                 echo "<tr>";
                 //Creamos botones, por cada fila, para Editar/Eliminar la entrada actual (por ID)

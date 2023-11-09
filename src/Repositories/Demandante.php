@@ -147,10 +147,10 @@ class Demandante implements CRUD {
 	}
 
 	public function updatear($nombreTabla, $valores, $id) {
-		
+
 	}
 
-	public function borrar( $nombreTabla, $id) {
+	public function eliminar( $nombreTabla, $id) {
 
 	}
 }
