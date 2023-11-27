@@ -48,8 +48,8 @@
                 <form action="#">
                     <label for="puesto1">Se busca personal para... </label><input id="puesto1" name="puesto1" type="text" placeholder="Puesto de trabajo"/>
                     <br><br>
-                    <b style="font-family: Bahnschrift, Arial, sans-serif; font-size: 24px;">Experiencia</b>
-                    <input type="checkbox" name="enableEXP" id="enableEXP"/>
+                    <b style="font-family: Bahnschrift, Arial, sans-serif; font-size: 24px;">Experiencia?</b>
+                    <input type="checkbox" name="enableEXP" id="enableEXP" checked aria-checked="true"/>
                     <div id="cajaExperiencia">
                         <div>
                             <label for="experiencia1">Experiencia en </label> <input id="experiencia1" type="text"/> <label for="time1">durante</label>
@@ -70,22 +70,16 @@
                     <div id="cajaSkills">
                         <div>
                             <label for="hab1">Habilidad 1</label> <select name="hab1" id="hab1"></select>
+                            &nbsp;<button id="addHabil">+</button>
                             <!--AÑADIR habilidades con JS + modal-->
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        <dialog style="z-index: 4; position: absolute; top: 10%; left: 70%;" id="dialogoError"></dialog>
-        <div style="position: absolute; top:0; left:0; transform:translateX(-50%) translateY(-50%);"></div>
-        <dialog style="display: flex; align-self: center;" id="selHabilidades">
-            <button style="float: right;" id="closeDisp">X</button>
-            <select name="habChosen" id="habChosen">
-                <option value="">
 
-                </option>
-            </select>
-        </dialog>
+        <dialog style="z-index: 4; position: absolute; top: 10%; left: 70%;" id="dialogoError"></dialog>
+        <!--<div style="position: absolute; top:0; left:0; transform:translateX(-50%) translateY(-50%);"></div>-->
     </div>
 <!--    HIDDEN Input para recoger datos de Sesión-->
     <input type="hidden" id="nomEmp" name="nomEmp" value="<?php echo $_SESSION['userData']['nombre']; ?>">

@@ -1,6 +1,7 @@
 <?php
     session_start();
     include_once("../Utiles/mySQL.php");
+    
 ?>
 <html lang="en">
 <head>
@@ -18,7 +19,7 @@
 <body>
     <ul class="barra-nav">
         <li class="logo-emp">
-            <a href="index.php">
+            <a href="../index.php">
                 <!--INSERTAR IMAGEN CUSTOM PARA ADMIN. TELEJOBS-->
                 <img id="img-logo img-pq" class="img-nav no-border" src="../img/icons/AdminBanner_tj.png" alt="logoTJ"/>
             </a>

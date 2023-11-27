@@ -1,5 +1,13 @@
 <?php
     session_start();
+    if (!isset($_SESSION['userData'])) {
+        header("Location: ../../index.php?checkLogin=true");
+    }
+    if (array_key_exists("id_DEM", $_SESSION['userData'])) {
+        $tipoUser = "demandantes";
+    } elseif (array_key_exists("id_EMP", $_SESSION['userData'])) {
+        $tipoUser = "empresas";
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

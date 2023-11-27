@@ -11,6 +11,7 @@ jQuery(function() {
         menuMainContainer.style.backgroundColor = "rgba(0,178,255,0.8)";
     }
 
+    //Lógica para resaltar/esconder los menús
     opcionesBar.each(function() {
         $(this).on("click", function(ev) {
             hideAll();
@@ -25,7 +26,6 @@ jQuery(function() {
             $(".menu" + numDIV).toggleClass("hidden");
         });
     });
-
     function hideAll() {
         $("div#menu > div").each(function() {
             $(this).addClass("hidden");
@@ -40,13 +40,13 @@ jQuery(function() {
     function confirmarBorrado() {
         let passwd = prompt("Buh-bye! :( Introduzca su contraseña para confirmar la eliminación de su cuenta:");
         if (passwd.length !== 0 && confirm("Si la contraseña es correcta se eliminará su cuenta junto con sus datos. ¿ESTÁ SEGURO?")) {
-            comprobarAJAX(passwd);
+            comprobarPWAJAX(passwd);
         } else if (passwd.length == 0) {
             alert("La contraseña no puede estar vacía!");
         }
     }
 
-    function comprobarAJAX(dato) {
+    function comprobarPWAJAX(dato) {
         let formData = new FormData();
         formData.append("accion", "checkPW");
         formData.append("contra", dato);
@@ -100,13 +100,15 @@ jQuery(function() {
                         actualizarDatos(e);
                     } else {
                         return false;
+                        break;
                     }
-                    break;
                     case "tlf":
                     if (confirm("¿Está seguro/a de cambiar el teléfono de contacto de su Empresa?")) {
                         actualizarDatos(e);
+                        break;
+                    } else {
+                        return false;
                     }
-                    break;
                 }
             } else {
                 //Mostrar fallo de validación HTML
@@ -118,7 +120,7 @@ jQuery(function() {
 
     function actualizarDatos(e) {
         //args.: TIPOUSUARIO, name del sibling -> Nombre del campo en BBDD, value del sibling -> valor a actualizar en ese campo NAME
-        let result = guardarCambio("demandante", e.target.previousElementSibling.name, e.target.previousElementSibling.value);
+        let result = guardarCambio(TIPOUSER, e.target.previousElementSibling.name, e.target.previousElementSibling.value);
         if (result) {
             //Si se puede actualizar el campo, actualizamos el input de texto a este
             e.target.removeEventListener('click', e.event);
@@ -139,7 +141,7 @@ jQuery(function() {
         //Funcion AJAX para guardar datos
         let xhttp = new XMLHttpRequest();
         let formVirt = new FormData();
-        if (tipoUser == "empresa") {
+        if (tipoUser == "empresas") {
             formVirt.append('tabla', 'empresas');
         } else {
             formVirt.append('tabla', 'demandantes');

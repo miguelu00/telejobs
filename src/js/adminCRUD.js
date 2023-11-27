@@ -44,6 +44,10 @@ jQuery(function() {
                 //Sacar valor y poner en el formulario del Modal de edición correspondiente
                     let datosArray = sacarDatosID(tipoElemento, id);
                 }
+            break;
+            case "borrar":
+
+                borrarElemID(tipoElemento, id);
         }
         
     }

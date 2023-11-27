@@ -7,6 +7,9 @@
         const TABLA_HABILIDADES = "habilidades";
         const TABLA_OFERTAS = "ofertas_trab";
         const TABLA_RECUPERACION = "recup_cuenta";
+        const NOT_FOUND = "404";
+        const FORBIDDEN = "403";
+        const SUCCESS = "200";
 
         /**
         * Métodos para implementar funciones CRUD en las clases DEMANDANTE y EMPRESA

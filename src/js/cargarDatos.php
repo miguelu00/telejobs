@@ -67,3 +67,18 @@
                 break;
         }
     }
+
+    if (isset($_REQUEST["tabla"])) {
+        $data = select("habilidades");
+        if (is_null($data)) {
+            $return = [
+                "status" => "404",
+                "data" => null
+            ];
+        } else {
+            $return = [
+                "status" => 
+            ]
+        }
+        echo json_encode($return);
+    }

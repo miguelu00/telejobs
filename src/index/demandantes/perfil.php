@@ -1,6 +1,9 @@
 <?php
 require_once "../../Utiles/mySQL.php";
 if (!isset($_SESSION['userData'])) {
+    if (!array_key_exists('id_DEM', $_SESSION['userData'])) {
+        header('Location: ../../index.php?checkLogin=true');
+    }
     $_SESSION['userData'] = select("demandantes", "*", "email LIKE '" . $_SESSION['user'] . "'");
 }
 //Si ha ocurrido un update, recargará los datos [variable creada en AJAX]

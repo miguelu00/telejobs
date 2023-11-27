@@ -1,14 +1,24 @@
 //Lado cliente - EMPRESA
 //Script encargado de CONTROLAR LAS ACCIONES referentes a las OFERTAS DE EMPLEO [CRUD + AJAX]
 const MAXEXPERIENCIA = 5;
-$(document).ready(function() {
+jQuery(function() {
     let selected = [], toggle = false, cambios = false; //recolectar nodos según se SELECCIONE SU CHECKBOX
     let defaultTitle = $("nav h3").html(), nombreEMP = document.querySelector("#nomEmp").value;
     var contador1 = 2, contador2 = 0, addPlaceholder = document.querySelector("#addExp");
-    var dialogoError = $("#dialogoError"), toggleBack = false;
+    var dialogoError = $("#dialogoError"), toggleBack = false, toggleExperiencia = true;
 
-    $("#crearOferta").on("click", abrirCreador);
-    $("#addExp").on("click", agregarExp);
+    $("#crearOferta").on("click", abrirCreador); //Abrir/cerrar menú de crear ofertas
+    $("#addExp").on("click", agregarExp); //agregar experiencia con botón (+)
+    $("#enableEXP").on("click", function() {
+        //Invertir toggleExperiencia
+        toggleExperiencia = (toggleExperiencia) ? false : true;
+        //Todos los elementos en #cajaExperiencia serán habilitados/deshabilitados específicamente
+        $("#cajaExperiencia").each(function() {
+            $(this).each(function() {
+                $(this).slideToggle(toggleExperiencia);
+            });
+        });
+    });//Desactivar div de "Experiencia"
 
     function abrirCreador() {
         limpiarEstilos();
@@ -26,7 +36,7 @@ $(document).ready(function() {
 
     function agregarExp(e) {
         e.preventDefault();
-        if (contador1 < MAXEXPERIENCIA) {
+        if (contador1 < MAXEXPERIENCIA+1) {
             let contenedorExp = document.querySelector("#cajaExperiencia");
 
             contenedorExp.append(crearModeloExp(contador1, e.target));
@@ -82,6 +92,37 @@ $(document).ready(function() {
             elem.querySelector("select").setAttribute("name", "time" + i);
             elem.querySelector("select").setAttribute("id", "time" + i);
         });
+    }
+
+    function hacerQuery(tabla) {
+        switch (tabla) {
+            case "habilidades":
+                $.ajax("cargarDatos.php", {
+                    data: {
+                        tabla: "habilidades",
+
+                    },
+                    success: {
+                        //Códigos 200...
+                    },
+                    error: {
+                        //Códigos 300/400...
+                    }
+                })
+        }
+    }
+
+    //Función que añade un dialog (si no existe) al documento, e introduce dentro
+    // un mensaje de ERROR
+    function mostrarError2(mensaje) {
+        let dialogErr = $("#dialogoError");
+        if (dialogErr == null) {
+            dialogErr = document.createElement("dialog");
+        }
+
+        dialogErr.attr("style", "z-index: 4; position: absolute; top: 10%; left: 70%;");
+        dialogErr.attr("id", "dialogoError");
+        dialogErr.html("<b>ERROR: </b>" + mensaje);
     }
 
     //Crear el modelo para los input de Experiencia; devolver un nodoHTML
@@ -143,7 +184,7 @@ $(document).ready(function() {
 
     function recogerDatos() {
         let datos = new FormData();
-        datos.append('accion', 1); //Identificador para indicar qué queremos hacer al script PHP
+        datos.append('accion', 1); //Identificador para indicarle qué queremos hacer al script PHP
 
         let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -155,12 +196,5 @@ $(document).ready(function() {
         }
         xhttp.open('POST', 'procesar.php', true);
         xhttp.send(datos);
-    }
-
-    function mostrarModal() {
-        const modalHabilidades = document.querySelector("#selHabilidades");
-        modalHabilidades.closeDisp.onclick = function() {
-
-        }
     }
 });

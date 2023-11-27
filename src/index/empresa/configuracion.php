@@ -45,8 +45,12 @@
             <h2 id="title">Email &amp; Contacto</h2>
             <br>
             <label for="email">Dirección de Correo <span class="orange">*</span></label><br>
-            <input required aria-required="true" type="email" id="email" name="email" value="<?php echo $_SESSION['userData']['email'] ?>" disabled/>&nbsp; <a class="editToggle">Cambiar</a>
+                <input required aria-required="true" type="email" id="email" name="email" value="<?php echo $_SESSION['userData']['email'] ?>" disabled/>
+                &nbsp; <a class="editToggle">Cambiar</a>
             <br>
+            <label for="tlf">Teléfono Empresarial</label>
+                <input required aria-required="true" type="number" id="tlf" name="tlf" value="<?php echo $_SESSION['userData']['tlf'] ?>" disabled/>
+                &nbsp; <a class="editToggle">Cambiar</a>
             <div class="warn danger-box">
                 <p>*<i class="fa fa-exclamation-triangle"></i> ATENCIÓN: Si modifica su correo electrónico, YA NO PODRÁ INICIAR SESIÓN CON SU OTRO CORREO HASTA QUE LO VUELVA A CAMBIAR. Proceda con cautela</p>
             </div>

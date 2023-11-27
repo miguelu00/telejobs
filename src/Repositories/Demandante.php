@@ -20,6 +20,17 @@ class Demandante implements CRUD {
 
     
     //+ métodos para inscribir / sacar datos / borrar / ver cuanto tiempo lleva logeado...
+	public function insertar($nombreTabla, $campos, $valores): int {
+		return insertInto2($nombreTabla, $campos, $valores);
+	}
+
+	public function updatear($nombreTabla, $valores, $id): int {
+		return update($nombreTabla, $valores, "id_DEM = " + $id);
+	}
+
+	public function eliminar( $nombreTabla, $id): int {
+		return deleteFrom($nombreTabla, "id_DEM = " + $id);
+	}
 
 
 	public function getNombre(){
@@ -140,17 +151,5 @@ class Demandante implements CRUD {
 
 	public function setFecha_inscripcion($fecha_inscripcion){
 		$this->fecha_inscripcion = $fecha_inscripcion;
-	}
-
-	public function insertar($nombreTabla, $campos, $valores) {
-
-	}
-
-	public function updatear($nombreTabla, $valores, $id) {
-
-	}
-
-	public function eliminar( $nombreTabla, $id) {
-
 	}
 }

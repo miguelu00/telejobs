@@ -1,10 +1,25 @@
 <?php
-    require_once("autoload.php");
-    include_once("conexionBD.php");
-    if (!isset($_SESSION)) {
-        session_start();
-    }
-    const CHECKUPDATEON = ["empresas", "demandantes", "ofertas_trab"];
+
+    class CRUD_Int extends conexionBD {
+        
+        private function __construct() {
+            return new PDO('mysql:host=localhost:3307;dbname=' . conexionBD::BDNAME, conexionBD::USERNAME, conexionBD::PASSWD);
+        }
+    
+        public static function getConexion() {
+            if (self::$_instancia == null) {
+                try {
+                    self::$_instancia = new PDO('mysql:host=localhost:3307;dbname=' . conexionBD::BDNAME, conexionBD::USERNAME, conexionBD::PASSWD);
+                } catch (PDOException $ex) {
+                    $_SESSION['status'] = 'ERROR PDO: <span>' .  $ex->getMessage() . '</span>';
+                }
+                return self::$_instancia;
+            } else {
+                return self::$_instancia;
+            }
+        }
+
+        const CHECKUPDATEON = ["empresas", "demandantes", "ofertas_trab"];
     //Tablas en las que comprobaremos que se hizo UPDATE/Cambió algo
     //Para comprobar que esto se ha hecho, usar $_SESSION['updateDONE'];
 
@@ -93,8 +108,11 @@
         return 0;
     }
 
-    function insertINTO2(string $nombreTabla, array $columnas, array $datos): int {
+    /*
+    function insertINTO2(string $nombreTabla, string ...$datos): int {
         try {
+            $strColumns = "";
+            $strDatos = "";
             $sqlString = "INSERT INTO " + $nombreTabla + " (";
 
             foreach ($columnas as $col) {
@@ -109,7 +127,7 @@
                 $sqlString .= "'" . $dato . "', ";
             }
 
-            $sqlString = substr($sqlString, 0, strlen($sqlString)-2); // quitar la comilla simple, y la coma
+            $sqlString = substr($sqlString, 0, strlen($sqlString)-2);
             $sqlString .= ")";
 
             $cnx = conexionBD::getConexion();
@@ -123,6 +141,7 @@
             return -1; //se ha producido un error.
         }
     }
+    */
 
 /**
  * Orden DELETE FROM para una tabla, POR DEFECTO se borra la primera fila.
@@ -252,3 +271,4 @@ function redireccionarUser()
         header("Location: index/demandantes/");
     }
 }
+    }

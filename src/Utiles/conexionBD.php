@@ -13,7 +13,7 @@ class conexionBD {
     private const BDNAME = 'telejobs';
     private static $_instancia;
 
-    public function __construct() {
+    private function __construct() {
         return new PDO('mysql:host=localhost:3307;dbname=' . conexionBD::BDNAME, conexionBD::USERNAME, conexionBD::PASSWD);
     }
 

@@ -12,6 +12,10 @@
             return update($nombreTabla, $campos, "ID = " . $id);
         }
 
+        public function selectear(int $id) {
+            
+        }
+
         public function eliminar($nombreTabla, $id): int {
             return deleteFrom($nombreTabla, "ID=" . $id);
         }
