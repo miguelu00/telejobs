@@ -19,6 +19,24 @@ class Demandante implements CRUD {
     private $fecha_inscripcion;
 
     
+	public function __construct($skill_ids, $experiencia, $nombre, $apellidos, $fechaNac, $tlf, $codPostal, $municipio, $email, $password, $fotoPerfil, $NIF, $cv_visible, $confirmado, $fecha_inscripcion) {
+        $this->skill_ids = $skill_ids;
+        $this->experiencia = $experiencia;
+        $this->nombre = $nombre;
+        $this->apellidos = $apellidos;
+        $this->fechaNac = $fechaNac;
+        $this->tlf = $tlf;
+        $this->codPostal = $codPostal;
+        $this->municipio = $municipio;
+        $this->email = $email;
+        $this->password = $password;
+        $this->fotoPerfil = $fotoPerfil;
+        $this->NIF = $NIF;
+        $this->cv_visible = $cv_visible;
+        $this->confirmado = $confirmado;
+        $this->fecha_inscripcion = $fecha_inscripcion;
+    }
+
     //+ métodos para inscribir / sacar datos / borrar / ver cuanto tiempo lleva logeado...
 	public function insertar($nombreTabla, $campos, $valores): int {
 		return insertInto2($nombreTabla, $campos, $valores);

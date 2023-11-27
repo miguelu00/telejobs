@@ -77,8 +77,9 @@
             ];
         } else {
             $return = [
-                "status" => 
-            ]
+                "status" => "200",
+                "data" => $data
+            ];
         }
         echo json_encode($return);
     }

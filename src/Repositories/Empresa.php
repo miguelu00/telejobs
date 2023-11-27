@@ -3,7 +3,19 @@
     class Empresa implements CRUD {
 
         private $id_EMP, $email, $fotoPerfil, 
-        $nomEmpresa, $nomPropio,  $apellidosPropio, $actividadEmp;
+        $nomEmpresa, $nomPropio,  $apellidosPropio, $actividadEmp, $tlf, $confirm;
+
+        public function __construct($id_EMP, $email, $fotoPerfil, $nomEmpresa, $nomPropio, $apellidosPropio, $actividadEmp, $tlf, $confirm) {
+            $this->id_EMP = $id_EMP;
+            $this->email = $email;
+            $this->fotoPerfil = $fotoPerfil;
+            $this->nomEmpresa = $nomEmpresa;
+            $this->nomPropio = $nomPropio;
+            $this->apellidosPropio = $apellidosPropio;
+            $this->actividadEmp = $actividadEmp;
+            $this->tlf = $tlf;
+            $this->confirm = $confirm;
+        }
 
         public function insertar($nombreTabla, $campos, $valores): int {
             return insertInto($nombreTabla, $valores);
@@ -13,7 +25,11 @@
         }
 
         public function selectear(int $id) {
-            
+            $data = select("empresas", '*', "id_EMP = " . $id);
+            $this->setIdEMP($data['id_EMP']);
+            $this->setEmail($data['email']);
+            $this->setFotoPerfil($data['foto']);
+            $this->setNomEmpresa($data['']);
         }
 
         public function eliminar($nombreTabla, $id): int {

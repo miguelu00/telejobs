@@ -3,20 +3,12 @@
     class CRUD_Int extends conexionBD {
         
         private function __construct() {
-            return new PDO('mysql:host=localhost:3307;dbname=' . conexionBD::BDNAME, conexionBD::USERNAME, conexionBD::PASSWD);
+            parent::__construct();
+            //new PDO('mysql:host=localhost:3307;dbname=' . conexionBD::BDNAME, conexionBD::USERNAME, conexionBD::PASSWD);
         }
     
         public static function getConexion() {
-            if (self::$_instancia == null) {
-                try {
-                    self::$_instancia = new PDO('mysql:host=localhost:3307;dbname=' . conexionBD::BDNAME, conexionBD::USERNAME, conexionBD::PASSWD);
-                } catch (PDOException $ex) {
-                    $_SESSION['status'] = 'ERROR PDO: <span>' .  $ex->getMessage() . '</span>';
-                }
-                return self::$_instancia;
-            } else {
-                return self::$_instancia;
-            }
+            return parent::getConexion();
         }
 
         const CHECKUPDATEON = ["empresas", "demandantes", "ofertas_trab"];

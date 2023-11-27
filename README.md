@@ -36,3 +36,5 @@ Pueden generar su propio CURRICULUM VITAE, mediante plantillas de HTML y un edit
 - Pedir habilidades por tipo en dichas ofertas de trabajo, y capacidad de crear habilidades (pref. de forma Simple)
 
 - Ver perfiles de DEMANDANTES // descargar sus CURRÍCULUMS
+
+- Capacidad de enviar NOTIFICACIONES a los DEMANDANTES
