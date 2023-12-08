@@ -190,9 +190,10 @@
 
 /**
  * -Sacará un SELECT de las tablas que indiquemos en el array ($tables); y después comprobará si el
- *  string ($email) que hemos indicado coincide con el campo que hayamos creado.
+ *  string ($email) que hemos indicado coincide con algun valor en el campo que hayamos creado.
  *
  * [MANEJO DE PRIVILEGIOS] => Adicionalmente, seteará una variable de sesión con el nombre de la tabla en la que ha encontrado el correo.
+ * <b>$_SESSION['tipoReg']</b>
  * @param string $correo - Correo a chequear en el campo "email" de la/s tabla/s especificada/s
  * @param array $tables - Tablas a especificar, en un array de Strings | array("tabla1", "tabla3"[, ...])
  * @return bool - Devolverá <b>true</b> si algún campo "email" de las tablas contiene el email indicado

@@ -75,6 +75,9 @@
         </aside>
         <div class="main1-wrap">
             <!-- Contenido principal, Nuevas ofertas de Empleo -->
+            <div>
+                
+            </div>
         </div>
     </div>
     <footer class="footer-emp">

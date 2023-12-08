@@ -6,9 +6,9 @@
     if (isset($_POST['registroDem'])) {
         $correoUser = $_POST['emailHid'];
         if (!checkRegister($correoUser, array("demandantes"))) {
-            die("ERROR FATAL");
+            die("DEBE HABER INGRESADO SU EMAIL Y CONTRASENIA ANTES DE COMPLETAR SU REGISTRO!");
         }
-        //Si esta registrado ya, completar el registro
+        //Si esta registrado ya, completar el registro con todos los datos del Demandante
         update("demandantes",
             "skill_ids = '" . $_POST['habils'] . ", " . $_POST['masHabils'] . "', 
             nombre = '" . $_POST['nom1'] . "', 
@@ -32,9 +32,9 @@
         }
         if (!checkRegister($correoUser, array("empresas"))) {
             header("Location: ../index.php?checkRegister=true");
-            die("ERROR FATAL");
+            die("DEBE HABER INGRESADO SU EMAIL Y CONTRASENIA ANTES DE COMPLETAR SU REGISTRO!");
         }
-        //Si esta registrado ya, completar el registro
+        //Si esta registrado ya, completar el registro con todos los datos de la Empresa usuario
         update("empresas",
             "nombre = '" . $_POST['nomEmpresa'] . "', 
             nombre_Prop = '" . $_POST['nom3'] . "', 
@@ -50,6 +50,6 @@
             emp_ETT = " . $ettCheck,
             "email='" . $correoUser . "'");
         //Enviamos correo de verificación
-        header("Location: ../Utiles/enviarMail.php?mail=" . $correoUser . "&nombre=" . $_POST['nom1'] . " " . $_POST['apels1'] . "&tipo=DEMANDANTE");
+        header("Location: ../Utiles/enviarMail.php?mail=" . $correoUser . "&nombre=" . $_POST['nom1'] . " " . $_POST['apels1'] . "&tipo=EMPRESA");
         die();
     }

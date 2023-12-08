@@ -1,7 +1,7 @@
 <?php
     session_start();
-    include_once("../Utiles/mySQL.php");
-    
+    include_once("../Utiles/autoload.php");
+    include_once("../Utiles/comprobarSesion.php");
 ?>
 <html lang="en">
 <head>

@@ -43,11 +43,30 @@ jQuery(function() {
                 for (td of filaTDs) {
                 //Sacar valor y poner en el formulario del Modal de edición correspondiente
                     let datosArray = sacarDatosID(tipoElemento, id);
+                    if (tipoElemento == "D") {
+                        $("#idDem").val(datosArray['id_DEM']);
+                        $("#habilidadesDem").val(datosArray['skill_ids']);
+                        $("#experienciaDem").val(datosArray['experiencia']);
+                        $("#nombreDem").val(datosArray['nombre']);
+                        $("#apellidosDem").val(datosArray['apellidos']);
+                        $("#fechaNacDem").val(datosArray['fechaNac']);
+                        $("#tlfDem").val(datosArray['tlf']);
+                        $("#cPostalDem").val(datosArray['cPost']);
+                        //TODO - Funcion obtener provincia con el prefijo del codigo postal $("#provincia1").val(datosArray['']);
+                        $("#municipioDem").val(datosArray['munip']);
+                        //TODO - Rellenar <select> de municipios con catastro (llamada PHP)
+                    }
+                    if (tipoElemento == "E") {
+
+                    }
                 }
             break;
             case "borrar":
-
-                borrarElemID(tipoElemento, id);
+                if (confirmarDelete.toString().toUpperCase() == "SI") {
+                    borrarElemID(tipoElemento, id);
+                } else {
+                    mostrarError("BORRADO CANCELADO!");
+                }
         }
         
     }
