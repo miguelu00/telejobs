@@ -21,7 +21,7 @@ $.ajaxSetup({
 });
 $.ajax({
     data: {
-        
+
     }
 });
 

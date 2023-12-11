@@ -1,14 +1,21 @@
 //Lado cliente - EMPRESA
 //Script encargado de CONTROLAR LAS ACCIONES referentes a las OFERTAS DE EMPLEO [CRUD + AJAX]
 const MAXEXPERIENCIA = 5;
+const MAXHABILIDADES = 5;
 jQuery(function() {
     let selected = [], toggle = false, cambios = false; //recolectar nodos según se SELECCIONE SU CHECKBOX
     let defaultTitle = $("nav h3").html(), nombreEMP = document.querySelector("#nomEmp").value;
-    var contador1 = 2, contador2 = 1, addPlaceholder = document.querySelector("#addExp");
+    var contador1 = 2, contador2 = 1, addPlaceholder = document.querySelector("#addExp"), addHabilsPlaceholder = document.querySelector("#addHabil");
     var dialogoError = $("#dialogoError"), toggleBack = false, toggleExperiencia = true;
+
+    /**
+     * Se almacenará en esta variable las habilidades tomadas por AJAX/BBDD
+     */
+    var datosHabils;
 
     $("#crearOferta").on("click", abrirCreador); //Abrir/cerrar menú de crear ofertas
     $("#addExp").on("click", agregarExp); //agregar experiencia con botón (+)
+    $("#addHabil").on("click", agregarHabil); //agregar habilidades con el botón (+)
     $("#enableEXP").on("click", function() {
         //Invertir toggleExperiencia
         toggleExperiencia = (toggleExperiencia) ? false : true;
@@ -20,8 +27,41 @@ jQuery(function() {
         });
     });//Desactivar div de "Experiencia"
 
+    /**
+     * Evento del botón para crear una nueva Oferta de Empleo
+     */
+    $("#confirmarOferta").on("click", function(e) {
+        if (camposVacios()) {
+            e.preventDefault();
+            $("#warnMenu1").fadeIn();
+            setTimeout(function() {
+                $("#warnMenu1").fadeOut();
+            }, 2500);
+        }
+    });
+
+    /**
+     * Comprobar si alguno de los campos de texto del menú con ID "creador"
+     * están vacíos
+     * 
+     * Devuelve un booleano: TRUE si existe algún campo vacío, FALSE si no.
+     */
+    function camposVacios() {
+        let vacios = false;
+        $("#creador input[type=text]").each(function(i, elem) {
+            if (elem.value == "") {
+                vacios = true;
+            }
+        });
+        return vacios;
+    }
+
+    /**
+     * Abrir/cerrar el menú para generar ofertas
+     */
     function abrirCreador() {
         limpiarEstilos();
+        //Marcar como activado/desactivado el menú para crear ofertas de trabajo
         (!toggle) ? toggle=true : toggle=false;
         if (toggle) {
             $("#crearOferta").addClass("active");
@@ -39,7 +79,7 @@ jQuery(function() {
         if (contador1 < MAXEXPERIENCIA+1) {
             let contenedorExp = document.querySelector("#cajaExperiencia");
 
-            contenedorExp.append(crearModeloExp(contador1, e.target));
+            contenedorExp.append(crearModeloExp(contador1, e.target)); //le pasamos el estado del contador2, y el botón de agregar
             e.target.remove();
             contador1++;
 
@@ -62,12 +102,38 @@ jQuery(function() {
             contador1--;
             if (contador1 == 2) {
                 //Esto quiere decir que ya hemos llegado al último input de experiencia
-                e.target.remove();
+                e.target.remove(); // asi que eliminamos el botón de quitar Exp.
                 document.querySelector("#cajaExperiencia div:first-child").appendChild(addPlaceholder);
             }
         }
         reordenarDivs();
     }
+
+    function agregarHabil(e) {
+        e.preventDefault();
+        if (contador2 < MAXHABILIDADES) {
+            let contenedorHabs = document.querySelector("#cajaSkills");
+            contador2++;
+            contenedorHabs.append(crearModeloHabils(contador2, e.target)); //le pasamos el estado del contador2, y el botón de agregar
+            mostrarSelectHabilidades(datosHabils, "hab" + contador2);
+            e.target.remove();
+        } else {
+            mostrarError("Máximo " + MAXHABILIDADES + " habilidades!");
+        }
+    }
+    function quitarHabil(e) {
+        e.preventDefault();
+        if (contador2 > 1) {
+            contador2--;
+            e.target.parentElement.remove();
+            if (contador2 == 1) {
+                e.target.remove(); //eliminamos el botón de quitar Habilidades
+                document.querySelector("#cajaSkills div:first-child").appendChild(addHabilsPlaceholder);
+            }
+        }
+        reordenarDivs2();
+    }
+
     /**
      * Funcionalidad botón Atrás
      */
@@ -85,8 +151,8 @@ jQuery(function() {
     }
 
     /**
-     * Le damos los ID y otros atributos para que se mantengan ordenados 
-     * los elementos del DIV para "experiencia".
+     * Le damos los ID y otros atributos a los elementos del DIV
+     * para mantenerlos ordenados en secuencia en el apartado de Experiencia.
      */
     function reordenarDivs() {
         let i = 0;
@@ -101,6 +167,26 @@ jQuery(function() {
         });
     }
 
+    /**
+     * Le damos los ID y otros atributos a los elementos del DIV de habilidades,
+     * para que estos atributos se mantengan ordenados en secuencia.
+     */
+    function reordenarDivs2() {
+        let i = 0;
+        document.querySelectorAll("#cajaSkills > div").forEach(function(elem) {
+            i++;
+            elem.querySelector("label").setAttribute("for", "hab" + i);
+            elem.querySelector("label").innerHTML = "Habilidad " + i;
+            elem.querySelector("select").setAttribute("id", "hab" + i);
+        });
+    }
+
+    /**
+     * Pide y recoge los datos a JQuery, que hará una petición a la API de telejobs.
+     * 
+     * @param tabla - La tabla de mySQL sobre la que queremos realizar la consulta.
+     * @param idCampo - El ID del campos sobre el que se plasmaran los datos de la consulta a la API.
+     */
     function hacerQuery(tabla, idCampo) {
         switch (tabla) {
             case "habilidades":
@@ -111,6 +197,7 @@ jQuery(function() {
                     },
                     success: function(data) {
                         //Códigos 200...
+                        datosHabils = JSON.parse(data);
                         mostrarSelectHabilidades(JSON.parse(data), idCampo);
                     },
                     error: function() {
@@ -122,31 +209,76 @@ jQuery(function() {
         }
     }
 
+    /**
+     * Mostrará en el select indicado con id 'idCampo', los datos recogidos en el parámetro 'data'.
+     * Y devolverá dichos datos.
+     * 
+     * @param data - Los datos (recogidos por AJAX) que se agregarán al select
+     * @param idcampo - El ID del elemento <select> que queremos rellenar con dichos datos
+     */
     function mostrarSelectHabilidades(data, idcampo) {
-        data = data.data;
-        for (datos of data) {
-            $("#cajaSkills div select#hab" + idcampo).html(
-                $("#cajaSkills div select#hab" + idcampo).html() + 
+        let data2 = data.data;
+        for (datos of data2) {
+            $("#cajaSkills div select#" + idcampo).html(
+                $("#cajaSkills div select#" + idcampo).html() + 
                 "<option value='" + datos.IDHabil + "'>" + datos.nombre + " - " + "<b>" + datos.tipo + "</b>"
                 + "</option>"
             );
         }
+        return data;
     }
 
-    //Función que añade un dialog (si no existe) al documento, e introduce dentro
-    // un mensaje de ERROR
+    /**
+     * Función que añade un dialog (si no existe) al documento, e introduce dentro
+     * un mensaje de ERROR
+     * 
+     * @param mensaje - El mensaje de Error que queremos que aparezca
+     */ 
     function mostrarError2(mensaje) {
         let dialogErr = $("#dialogoError");
         if (dialogErr == null) {
             dialogErr = document.createElement("dialog");
         }
 
+        //Recolocamos el z-index para que se mantenga encima del resto de elementos.
         dialogErr.attr("style", "z-index: 4; position: absolute; top: 10%; left: 70%;");
         dialogErr.attr("id", "dialogoError");
         dialogErr.html("<b>ERROR: </b>" + mensaje);
+        document.body.appendChild(dialogErr);
     }
 
-    //Crear el modelo para los input de Experiencia; devolver un nodoHTML
+    /**
+     * Crear la vista para los input de Habilidades; devuelve un nodoHTML (div equivalente a una entrada de habilidad)
+     */
+    function crearModeloHabils(numElem, botonAdd) {
+        let label = document.createElement("label");
+        label.setAttribute("for", "hab" + numElem);
+        label.innerText = "Habilidad " + numElem;
+
+        let select = document.createElement("select");
+        select.setAttribute("id", "hab" + numElem);
+        select.setAttribute("name", "hab" + numElem);
+
+        let btnAdd = botonAdd.cloneNode(true);
+        btnAdd.setAttribute("name", "addHabil");
+        btnAdd.addEventListener("click", agregarHabil);
+
+        let btnQuitar = document.createElement("button");
+        btnQuitar.setAttribute("name", "quitarHabil");
+        btnQuitar.innerText = "-";
+        btnQuitar.style.fontSize = "18px";
+        btnQuitar.style.color = "red";
+        btnQuitar.addEventListener("click", quitarHabil);
+
+        let divContainer = document.createElement("div");
+        divContainer.append(label, select, btnAdd, btnQuitar);
+
+        return divContainer;
+    }
+
+    /**
+     * Crear la vista para los input de Experiencia; devuelve un nodoHTML (div equivalente a una entrada de experiencia)
+     */
     function crearModeloExp(numElem, botonAdd) {
         let label = document.createElement("label");
         label.setAttribute("for", "experiencia" + numElem);
@@ -155,6 +287,7 @@ jQuery(function() {
         let input = document.createElement("input");
         input.setAttribute("type", "text");
         input.setAttribute("id", "experiencia" + numElem);
+        input.setAttribute("name", "experiencia" + numElem);
 
         let label2 = document.createElement("label");
         label2.setAttribute("for", "time" + numElem);

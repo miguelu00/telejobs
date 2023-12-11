@@ -4,13 +4,18 @@
     require_once("../Utiles/mySQL.php");
 
     //Clave de API hardcoded
-    //$_REQUEST['api_key'] = "321admin";
+    //$_REQUEST['api_key'] = "$2y$10$pVCVv2EGOk3wEA7jPbGrlu2wHZg1Kv/GTPqKnGZGSkJI4yUycrPvG";
 
     $req_method = getenv('REQUEST_METHOD');
     // (se usa @ delante de la variable $_SERVER[...] para evitar/suprimir mensajes de error en caso de no estar setteada)
     $peticion = explode("/", substr(@$_SERVER['PATH_INFO'], 1));
     $tablasList = ["candidaturas", "categoria_emp", "demandantes", "empresas", "habilidades", "ofertas_trab", "recup_cuenta"];
 
+    if (isset($_REQUEST['registro'])) {
+        if ($_REQUEST['registro'] == "true") {
+            $_REQUEST['api_key'] = "\$2y\$10\$pVCVv2EGOk3wEA7jPbGrlu2wHZg1Kv/GTPqKnGZGSkJI4yUycrPvG";
+        }
+    }
     /**
      * autenticación para la api (COMPROBACION API KEY)
      * 
@@ -40,29 +45,32 @@
         case 'PUT':
             // UPDATE CON TODOS LOS DATOS
             if (!isset($_REQUEST['datos'])) {
-                
+                if (!str_contains($_SESSION['perm'], "rw")) {
+                    devolverCodigoHTTP(CRUD_Int::FORBIDDEN);
+                    exit();
+                }
             }
             break;
         case 'POST':
             // CREATE - CREAR UN NUEVO REGISTRO / DEVUELVE ALGUN DATO
-            if (!isset($_REQUEST['datos'])) {
+            if (!isset($_REQUEST['DATOS'])) {
                 devolverCodigoHTTP(CRUD_Int::BAD_REQUEST);
                 exit();
             }
-            if (!isset($_REQUEST['CAMPOS'])) {
+            if (isset($_REQUEST['CAMPOS'])) {
                 if (insertINTO2($_REQUEST['tabla'], $_REQUEST['CAMPOS'], $_REQUEST['DATOS'])) {
                     echo json_encode([
                         "status" => 201,
                         "data" => select($_REQUEST['tabla'], "*")
                     ]);
                 } else {
-                    
+
                 }
             }
             break;
         case 'GET':
             // CARGAR UNO O VARIOS REGISTROS
-            if (!isset($_REQUEST['WHERE'])) {
+            if (!isset($_REQUEST['WHERE']) && !isset($_REQUEST['CAMPOS'])) {
                 echo json_encode([
                     "status" => 200,
                     "data" => select($_REQUEST['tabla'])
@@ -70,12 +78,17 @@
             } else if (!isset($_REQUEST['CAMPOS'])) {
                 echo json_encode([
                     "status" => 200,
-                    "data" => select($_REQUEST['tabla'], "*". $_REQUEST['WHERE'])
+                    "data" => select($_REQUEST['tabla'], "*", $_REQUEST['WHERE'])
+                ]);
+            } else if (!isset($_REQUEST['WHERE'])) {
+                echo json_encode([
+                    "status" => 200,
+                    "data" => select($_REQUEST['tabla'], $_REQUEST['CAMPOS'])
                 ]);
             } else {
                 echo json_encode([
                     "status" => 200,
-                    "data" => select($_REQUEST['tabla'], $_REQUEST['CAMPOS']. $_REQUEST['WHERE'])
+                    "data" => select($_REQUEST['tabla'], $_REQUEST['CAMPOS'], $_REQUEST['WHERE'])
                 ]);
             }
             break;
@@ -88,7 +101,7 @@
             break;
         case 'DELETE':
             //DELETE UNO O VARIOS DATOS DE UN REGISTRO
-
+            
             break;
     }
 

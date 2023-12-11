@@ -52,7 +52,7 @@
                     <input type="checkbox" name="enableEXP" id="enableEXP" checked aria-checked="true"/>
                     <div id="cajaExperiencia">
                         <div>
-                            <label for="experiencia1">Experiencia en </label> <input id="experiencia1" type="text"/> <label for="time1">durante</label>
+                            <label for="experiencia1">Experiencia en </label> <input id="experiencia1" name="experiencia1" type="text"/> <label for="time1">durante</label>
                             <select name="time1" id="time1">
                                 <option value="6mes">&ge; 6 meses</option>
                                 <option value="1year">Un año</option>
@@ -70,10 +70,14 @@
                     <div id="cajaSkills">
                         <div>
                             <label for="hab1">Habilidad 1</label> <select name="hab1" id="hab1"></select>
-                            &nbsp;<button id="addHabil">+</button>
+                            &nbsp;<button id="addHabil" name="addHabil">+</button>
                             <!--AÑADIR habilidades con JS + modal-->
                         </div>
                     </div>
+
+                    <br>
+
+                    <button id="confirmarOferta" type="submit">Crear oferta!</button> <span id="warnMenu1" class="warning" hidden>Antes debes completar todos los campos!</span>
                 </form>
             </div>
         </div>

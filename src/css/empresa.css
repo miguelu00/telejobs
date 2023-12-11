@@ -32,6 +32,7 @@ body {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
+/*El menu 1 representa el menú "Publicar oferta", el menu2 "Descartar oferta" y así...*/
 .main-view .menu1 {
     margin: 10px 20px;
     border: 3px solid coral;
@@ -55,6 +56,12 @@ body {
     background: var(--bgOfertasEMP) no-repeat;
     background-position: center;
     background-size: cover;
+}
+div#cajaSkills > div, div#cajaExperiencia > div{
+    padding: 5px 0 5px 0;
+}
+div#cajaSkills > div button {
+    margin-right: 5px;
 }
 
 aside.aside-izq {
@@ -232,6 +239,10 @@ aside.aside-izq div h2 {
     height: auto;
 }
 
+button#confirmarOferta {
+    margin-left: 10px;
+}
+
 /*Contenedor pág. Principal*/
 div.content-main {
     display: flex;
@@ -393,4 +404,13 @@ footer.footer-emp {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+}
+.warning {
+    background-color: rgba(0, 0, 0, 0.50);
+    padding: 0 5px;
+    margin: 0 25px;
+    max-width: fit-content;
+    min-width: none;
+    color: rgb(255, 111, 0);
+    font-size: 20px;
 }

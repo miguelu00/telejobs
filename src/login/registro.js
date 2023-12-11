@@ -122,7 +122,7 @@ jQuery(function() {
         });
     }
 
-//hacer los radio input 'deseleccionables'
+//hacer que se pueda descartar la selección en los radio input
     $('input[type="radio"]').on("mousedown", function() {
         if (this.checked) {
             $(this).on("mouseup",function(e) {
@@ -169,7 +169,7 @@ jQuery(function() {
                     case "3":
                         if (toggleBtn.value == "empresa") {
                             mostrarError("ERROR. Ya existe una cuenta con esa dirección de correo!" +
-                                "Intenta <a href='../login/enterprise.php.php'>iniciar sesión</a> si aún no has completado tu registro!");
+                                "Intenta <a href='../login/enterprise.php'>iniciar sesión</a> si aún no has completado tu registro!");
                         }
                         if (toggleBtn.value == "demandante") {
                             mostrarError("ERROR. Ya existe una cuenta con esa dirección de correo!" +
@@ -245,12 +245,18 @@ jQuery(function() {
             }
         })
     }
+
+    /**
+     * Cargará, a través de una llamada a la API de telejobs, las
+     * actividades que realizan las empresas
+     */
     function cargarActividades() {
-        $.ajax('../js/cargarDatos.php', {
-            type: "POST",
+        $.ajax('../Repositories/API.php', {
+            type: "GET",
             data: {
-                datos: "actividades",
-                limit: 0
+                tabla: "empresas",
+                CAMPOS: "actividad_p",
+                registro: "true"
             },
             beforeSend: function() {
                 //$("#loadHabils").fadeIn();
@@ -262,21 +268,26 @@ jQuery(function() {
             },
             success: function(data) {
                 let select = $("#actividad1");
-                data2 = JSON.parse(data)
+                data = JSON.parse(data);
+                data = data.data;
 
-                for (dato of data2) {
-                    select.html(select.html() + "<option value='" + dato.tipo+ "'>" + dato.tipo + "</option>");
+                for (dato of data) {
+                    select.html(select.html() + "<option value='" + dato.actividad_p + "'>" + dato.actividad_p + "</option>");
                 }
-
             }
         });
     }
+
+    /**
+     * Cargará, a través de una llamada a la API de telejobs, las
+     * habilidades que se pedirán de los empleados.
+     */
     function cargarHabilidades() {
-        $.ajax('../js/cargarDatos.php', {
-            type: "POST",
+        $.ajax('../Repositories/API.php', {
+            type: "GET",
             data: {
                 datos: "habilidades",
-                limit: 0
+                registro: "true"
             },
             beforeSend: function() {
                 $("#loadHabils").fadeIn();
