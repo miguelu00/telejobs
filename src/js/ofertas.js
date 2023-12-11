@@ -4,7 +4,7 @@ const MAXEXPERIENCIA = 5;
 jQuery(function() {
     let selected = [], toggle = false, cambios = false; //recolectar nodos según se SELECCIONE SU CHECKBOX
     let defaultTitle = $("nav h3").html(), nombreEMP = document.querySelector("#nomEmp").value;
-    var contador1 = 2, contador2 = 0, addPlaceholder = document.querySelector("#addExp");
+    var contador1 = 2, contador2 = 1, addPlaceholder = document.querySelector("#addExp");
     var dialogoError = $("#dialogoError"), toggleBack = false, toggleExperiencia = true;
 
     $("#crearOferta").on("click", abrirCreador); //Abrir/cerrar menú de crear ofertas
@@ -68,7 +68,9 @@ jQuery(function() {
         }
         reordenarDivs();
     }
-
+    /**
+     * Funcionalidad botón Atrás
+     */
     $("a#backBtn").on("click", backFunct);
     function backFunct(e) {
         if (!$("#crearOferta").hasClass("active") && !$("#trashOferta").hasClass("active") && !$("#avisarUser").hasClass("active")) {
@@ -81,6 +83,11 @@ jQuery(function() {
             });
         }
     }
+
+    /**
+     * Le damos los ID y otros atributos para que se mantengan ordenados 
+     * los elementos del DIV para "experiencia".
+     */
     function reordenarDivs() {
         let i = 0;
         document.querySelectorAll("#cajaExperiencia > div").forEach(function(elem) {
@@ -94,21 +101,35 @@ jQuery(function() {
         });
     }
 
-    function hacerQuery(tabla) {
+    function hacerQuery(tabla, idCampo) {
         switch (tabla) {
             case "habilidades":
-                $.ajax("cargarDatos.php", {
+                $.ajax("../../Repositories/API.php", {
+                    type: 'GET',
                     data: {
-                        tabla: "habilidades",
-
+                        tabla: "habilidades"
                     },
-                    success: {
+                    success: function(data) {
                         //Códigos 200...
+                        mostrarSelectHabilidades(JSON.parse(data), idCampo);
                     },
-                    error: {
+                    error: function() {
                         //Códigos 300/400...
+                        mostrarError("ERROR AJAX. Pongase en contacto con el Administrador!");
                     }
                 })
+            break;
+        }
+    }
+
+    function mostrarSelectHabilidades(data, idcampo) {
+        data = data.data;
+        for (datos of data) {
+            $("#cajaSkills div select#hab" + idcampo).html(
+                $("#cajaSkills div select#hab" + idcampo).html() + 
+                "<option value='" + datos.IDHabil + "'>" + datos.nombre + " - " + "<b>" + datos.tipo + "</b>"
+                + "</option>"
+            );
         }
     }
 
@@ -182,19 +203,6 @@ jQuery(function() {
         });
     }
 
-    function recogerDatos() {
-        let datos = new FormData();
-        datos.append('accion', 1); //Identificador para indicarle qué queremos hacer al script PHP
-
-        let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
-                console.log(JSON.parse(this.response));
-                data = JSON.parse(this.response);
-                return data;
-            }
-        }
-        xhttp.open('POST', 'procesar.php', true);
-        xhttp.send(datos);
-    }
+    
+    hacerQuery("habilidades", "hab" + contador2);
 });

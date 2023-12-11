@@ -183,5 +183,6 @@
         </dialog>
     </div>
     <script src="../login/registro.js"></script>
+    <script src="../js/cookies.js"></script>
 </body>
 </html>

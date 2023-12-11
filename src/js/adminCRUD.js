@@ -52,9 +52,7 @@ jQuery(function() {
                         $("#fechaNacDem").val(datosArray['fechaNac']);
                         $("#tlfDem").val(datosArray['tlf']);
                         $("#cPostalDem").val(datosArray['cPost']);
-                        //TODO - Funcion obtener provincia con el prefijo del codigo postal $("#provincia1").val(datosArray['']);
                         $("#municipioDem").val(datosArray['munip']);
-                        //TODO - Rellenar <select> de municipios con catastro (llamada PHP)
                     }
                     if (tipoElemento == "E") {
 
@@ -69,7 +67,6 @@ jQuery(function() {
                 }
                 break;
         }
-        
     }
     
     //tipoElemento -> si se trata de Empresa (E) ó Demandante (D)
@@ -128,8 +125,8 @@ jQuery(function() {
     
     //Poblar datos de las dos tablas: Empresas y Demandantes (usando AJAX)
     function obtenerDatos(tabla) {
-        $.ajax("getDatosAdmin.php", {
-            type : "POST",
+        $.ajax("../Repositories/API.php", {
+            type : "GET",
             data : {
                 "select": tabla
             },
@@ -182,7 +179,9 @@ jQuery(function() {
         })
     }
 
-    //Petición a servicio web del Catastro Nacional a través de AJAX, a esta función se le llama directamente desde *darProvincia(cpostal)*
+    /**
+     * Petición a servicio web del Catastro Nacional a través de AJAX, a esta función se le llama directamente desde *darProvincia(cpostal)*
+     */
     function setMunicipios(provincia) {
         $.ajax('pedirMunip.php', { //Petición AJAX al fichero .PHP que se conectará al servicio online del Catastro (municipios)
             type: "POST",
@@ -211,7 +210,9 @@ jQuery(function() {
         })
     }
 
-    //A partir de los dos primeros núms. del Codigo postal (prefijo), sacamos las provincias que le corresponden a dichos número.
+    /**
+     * A partir de los dos primeros núms. del Codigo postal (prefijo), sacamos las provincias que le corresponden a dichos número.
+     */
     function darProvincia(cpostal) {
         const cp_provincias = {
             1: "\u00C1lava", 2: "Albacete", 3: "Alicante", 4: "Almer\u00EDa", 5: "\u00C1vila",

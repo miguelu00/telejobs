@@ -15,6 +15,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../css/estilos.css"/>
     <link rel="stylesheet" href="../../css/demandante.css"/>
     <script src="../../js/jquery-3.6.3.js"></script>
@@ -69,6 +70,16 @@
             </a>
         </div>
     </ul>
+    <dialog id="userMenu1">
+        <div class="abs-usermenu">
+            <pre>Hola, <b><?php echo $_SESSION['userData']['nombre'] . "!</b>" ?></pre>
+            <ul>
+                <li><i class="fa fa-user icon-pq"></i><a class="clear" href="perfil.php">Mi perfil</a></li>
+                <li><a href="configuracion.php"><i class="fa fa-gear icon-pq"></i>Configuración</a></li>
+                <li class="red-link"><a href="../../index.php?logout=true"><i class="fa fa-external-link icon-pq"></i>Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </dialog>
 
     <label for="codig">CÓDIGO DEL CV ACTUAL</label><br>
     <div class="main">
@@ -80,7 +91,7 @@
     <br>
     <p>[<b>Ctrl-h</b> (dentro del Código) para actualizar la Vista previa!]</p>
     <br>
-    <p>Seleccione una plantilla: </p>
+    <p>PLANTILLAS DISPONIBLES: </p>
     <section>
         <input type="radio" id="plantilla1" value="plantilla1" name="selectPlantilla"/> 
         <label title="Plantilla Xpress" for="plantilla1">
@@ -95,8 +106,10 @@
             <img src="" alt="Plantilla3"/>
         </label>
     </section>
+    <script src="../../js/scriptlogo.js"></script>
+    <script src="../../js/imgnav.js"></script>
 <script>
-    $(document).ready(function() {
+    jQuery(function() {
         var htmlTags = ["html", "a", "title", "head", "label", "input", "pre", "h1", "h2", "h3", "h4", "h5", "h6", ""];
         document.querySelector("textarea").addEventListener("keydown", function(e) {
             //console.clear();
@@ -122,6 +135,10 @@
 
         function mostrarCV() {
             if (!checkCodigo(document.querySelector("textarea").value)) {
+                if ($("#dl1").length > 0 && $("#dl2").length > 0) {
+                    $("#dl1").remove();
+                    $("#dl2").remove();
+                }
                 return false;
                 //El error se muestra a través de la función checkCodigo(codigo)
             } else {
@@ -130,13 +147,38 @@
                 document.querySelector("#output").innerHTML = "";
                 document.querySelector("#output").remove();
                 document.querySelector("div.main").append(newIFrame);
+
+                var $btn = document.createElement("button");
+                $btn.id = "dl1";
+                $btn.innerHTML = "descargar HTML";
+
+                $btn.onclick = function() {
+                    downloadHTML()
+                };
+
+                var $btn2 = document.createElement("button");
+                $btn2.innerHTML = "descargar TXT";
+                $btn2.id = "dl2";
+
+                $btn2.onclick = function() {
+                    downloadTXT()
+                };
+
+                if ($("#dl1").length > 0 && $("#dl2").length > 0) {
+                    $("#dl1").remove();
+                    $("#dl2").remove();
+                }
+                
+                document.body.appendChild($btn);
+                document.body.appendChild($btn2);
+
             }
         }
         //No permitir NADA de código JavaScript escrito por el usuario. Sólo usar HTML puro y CSS
         function checkCodigo(codigo) {
             if (codigo.includes("<script>") || codigo.includes("<iframe") || codigo.includes("<script defer>") || codigo.includes("<script async>")) {
                 alert("ERROR. No se permite el uso de scripts escritos por el usuario ó codigo potencialmente malicioso. Rogamos su comprensión y gracias por usar nuestros servicios."
-                    + "\nElimine el código script que ha escrito y vuelva a intentarlo!");
+                    + "\nElimine el código script que haya escrito y vuelva a intentarlo!");
                 return false;
             }
             return true;
@@ -153,6 +195,35 @@
             .then(response => response.text())
             .then(text => $("textarea#codig").val(text));
             mostrarCV();
+        }
+
+        //Leer el textarea, extraer su texto (Value), y colocarlo en un fichero .HTML
+        function downloadHTML(){
+            var text = document.getElementById("codig").value;
+            text = text.replace(/\n/g, "\r\n"); // Mantenemos los saltos de línea
+            var blob = new Blob([text], { type: "text/html"});
+            var anchor = document.createElement("a");
+            anchor.download = "mi_CVGenerado.html";
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.target ="_blank";
+            anchor.style.display = "none" //para que no aparezca, el botón de descarga.
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+        }
+        //Leer el textarea, extraer su texto (Value), y colocarlo en un fichero .HTML
+        function downloadTXT(){
+            var text = document.getElementById("codig").value;
+            text = text.replace(/\n/g, "\r\n"); // Mantenemos los saltos de línea
+            var blob = new Blob([text], { type: "text/plain"});
+            var anchor = document.createElement("a");
+            anchor.download = "mi_CVGenerado.txt";
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.target ="_blank";
+            anchor.style.display = "none" //para que no aparezca, el botón de descarga.
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
         }
     });
 </script>

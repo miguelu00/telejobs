@@ -1,7 +1,6 @@
 <?php
     session_start();
     require_once "../Utiles/mySQL.php";
-    require_once "../Utiles/conexionBD.php";
 //Recogerá los datos, y según la variable sabrá si el usuario es DEMANDANTE ó EMPRESA
 // y lo logeará
 

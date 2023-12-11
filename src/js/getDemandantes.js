@@ -1,7 +1,7 @@
 //Script que recoge 3 demandantes (recientes a la fecha actual) y los ordena aleatoriamente
 // Tras ello, los muestra en la barra lateral de la página
 
-$(document).ready(function() {
+jQuery(function() {
     var arrayFull = [], gotData = false;
     var tout1 = null, contador = 1;
     var datos1 = {
@@ -45,7 +45,7 @@ $(document).ready(function() {
         gotData = true;
         if (contador == 3) {
             contador = 1;
-            tout1 = setTimeout(getDatos, 2000);
+            setTimeout(getDatos(), 1000);
             return false;
         }
         contador++;
@@ -67,21 +67,19 @@ $(document).ready(function() {
         // });
     }
 
-    function getImgs(arrayEmpresas) {
-        $.ajax("../../js/cargarDatos.php", {
-            type: "POST",
+    function getDatosEmpresas(arrayEmpresas) {
+        $.ajax("../../Repositories/API.php", {
+            type: "GET",
             data: {
-                datos: "getImgEmpresa",
-                empresas: arrayEmpresas
+                tabla: "empresas"
             },
             success: function(datos) {
                 gotData = true;
-                $("#loadingAside").fadeOut();
                 let arrDatos = JSON.parse(datos);
                 for (obj of arrDatos) {
                     arrayFull.push(obj);
+                    modeloMain(obj);
                 }
-                console.log(arrayFull);
             }
         });
     }
@@ -119,5 +117,41 @@ $(document).ready(function() {
                 cardContainer.append(nameEmpresa, image, br, tituloOffer, listaUn);
                 $("div.card-aside").fadeIn();
             });
+    }
+
+    function modeloMain(data) {
+        let mainContainer = document.querySelector(".main1-wrap div");
+        
+        //Datos de la empresa
+        let nombreEmpresa = data.nombreEmp;
+        let imagenURI = data.img;
+        let actividadPrincipal = data.actividad;
+
+        //Componentes para visualizar los datos
+        let divmain, imagen, divActiv;
+        let btnInfo = document.createElement("button");
+        btnInfo.classList.add("infoBtn");
+        btnInfo.innerHTML = "<i class='fa fa-info-circle' style='font-size: 24px;'></i>";
+        divmain = document.createElement("div");
+        divmain.classList.add("cardEmpresa");
+        h3Activ = document.createElement("h3");
+        h3Activ.innerHTML = actividadPrincipal;
+        imagen = document.createElement("img");
+        imagen.src = imagenURI;
+        imagen.alt = nombreEmpresa;
+
+        let br = document.createElement("br");
+
+        let h5 = document.createElement("h5");
+        h5.innerText = nombreEmpresa;
+
+        divmain.appendChild(imagen);
+        divmain.appendChild(br);
+        divmain.appendChild(h5);
+        divmain.appendChild(h3Activ);
+        divmain.appendChild(btnInfo);
+
+
+        mainContainer.appendChild(divmain);
     }
 });

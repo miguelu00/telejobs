@@ -1,14 +1,39 @@
 <?php
 
     class CRUD_Int extends conexionBD {
+
+
+        private const USERNAME = 'root';
+        private const PASSWD = '4321';
+        private const BDNAME = 'telejobs';
+        static $_instancia;
+
+        const TABLA_EMPRESA = "empresas";
+        const TABLA_DEMANDANTES = "demandantes";
+        const TABLA_HABILIDADES = "habilidades";
+        const TABLA_OFERTAS = "ofertas_trab";
+        const TABLA_RECUPERACION = "recup_cuenta";
+        const NOT_FOUND = 404;
+        const FORBIDDEN = 403;
+        const UNAUTHORIZED = 401;
+        const BAD_REQUEST = 400;
+        const SUCCESS = 200;
         
-        private function __construct() {
-            parent::__construct();
-            //new PDO('mysql:host=localhost:3307;dbname=' . conexionBD::BDNAME, conexionBD::USERNAME, conexionBD::PASSWD);
+        public function __construct() {
+            new PDO('mysql:host=localhost:3307;dbname=' . self::BDNAME, self::USERNAME, self::PASSWD);
         }
     
-        public static function getConexion() {
-            return parent::getConexion();
+        public static function getConexion(): PDO {
+            if (self::$_instancia == null) {
+                try {
+                    self::$_instancia = new PDO('mysql:host=localhost:3307;dbname=' . self::BDNAME, self::USERNAME, self::PASSWD);
+                } catch (PDOException $ex) {
+                    $_SESSION['status'] = 'ERROR PDO: <span>' .  $ex->getMessage() . '</span>';
+                }
+                return self::$_instancia;
+            } else {
+                return self::$_instancia;
+            }
         }
 
         const CHECKUPDATEON = ["empresas", "demandantes", "ofertas_trab"];
@@ -29,7 +54,7 @@
  * @return array|null - Devuelve un <b>array</b> asociativo con los resultados de la CONSULTA SELECT (segun PDO), <b>NULL</b> si no encuentra nada
  *
  */
-    function select($nombreTabla, $campo='*', $cond_WHERE=null, $orderby = 1, $LIMIT = null): array|null
+    static public function select($nombreTabla, $campo='*', $cond_WHERE=null, $orderby = 1, $LIMIT = null): array|null
     {
         $array = null;
         try {
@@ -47,11 +72,11 @@
                 }
             }
 
-            $cnx = conexionBD::getConexion();
-            if ($cnx == null) {
+            self::$_instancia = conexionBD::getConexion();
+            if (self::$_instancia == null) {
                 return null;
             }
-            $stmt = $cnx->query($sql);
+            $stmt = self::$_instancia->query($sql);
             if ($stmt->rowCount() > 1) {
                 //Array multifila / devolverá un array [0 => ['IDHabil' => X, 'id_EMP' => Y, 'puesto' => 'Analista Software', ...], 1 => ['IDHabil' => Z, 'id_EMP' => P, 'puesto' => 'Arquitecto', ...], ...]
                 $array = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -65,10 +90,19 @@
 
 
         } catch (Exception $e) {
-
+            
         }
         return $array;
     }
+
+    /** 
+     * Comprobar si la clave de API pasada por parámetro se encuentra en la lista
+     * y coincide con alguna guardada en la Base de Datos.
+     */
+    static public function api_existe($clave_api): bool {
+        return self::select("api_keys", "*", "api_key = '" . $clave_api . "'") != null;
+    }
+
 /**
  * Insertar en la Tabla que indiquemos, introducir tantos argumentos como campos en la tabla haya para insertar
  *
@@ -77,7 +111,7 @@
  * @return int - Devuelve 1 si hace el INSERT correctamente; 0 si no
  *
  */
-    function insertInto($nombreTabla, ...$datos): int {
+    static function insertInto($nombreTabla, ...$datos): int {
         try {
             $strDatos = "";
             foreach ($datos as $dato) {
@@ -87,9 +121,9 @@
                 $strDatos = substr($strDatos, 0, strlen($strDatos)-1); //quitar la coma que queda al final
             }
             $sql = "INSERT INTO $nombreTabla VALUES($strDatos)";
-            $cnx = conexionBD::getConexion();
+            self::$_instancia = conexionBD::getConexion();
 
-            $stmt = $cnx->prepare($sql);
+            $stmt = self::$_instancia->prepare($sql);
             if ($stmt->execute()) {
                 return 1;
             }
@@ -122,8 +156,8 @@
             $sqlString = substr($sqlString, 0, strlen($sqlString)-2);
             $sqlString .= ")";
 
-            $cnx = conexionBD::getConexion();
-            $stmt = $cnx->prepare($sqlString);
+            self::$_instancia = conexionBD::getConexion();
+            $stmt = self::$_instancia->prepare($sqlString);
 
             if ($stmt->execute()) {
                 return 1;
@@ -143,7 +177,7 @@
  * @return int - Devuelve 1 si hace el DELETE correctamente; 0 si no
  *
  */
-    function deleteFrom($nombreTabla, $where = 'ROWNUM=1', $ROWNUM = null): int {
+    public function deleteFrom($nombreTabla, $where = 'ROWNUM=1', $ROWNUM = null): int {
         try {
             if ($where != 'ROWNUM=1') {
                 $sql = "DELETE FROM $nombreTabla WHERE $where";
@@ -155,8 +189,8 @@
                 }
             }
 
-            $cnx = conexionBD::getConexion();
-            $stmt = $cnx->prepare($sql);
+            self::$_instancia = conexionBD::getConexion();
+            $stmt = self::$_instancia->prepare($sql);
             if ($stmt->execute()) {
                 return 1;
             } else {
@@ -174,7 +208,7 @@
  * @param $WHERE - [Indicador WHERE] condiciones a seguir al aplicar el SET; recuerde que los VARCHAR deberán ir entre comillas dobles/simples
  * @return int - Devuelve <b>1</b> si se consigue actualizar; <b>0</b> si se falla
  */
-    function update(string $nombreTabla, string $SET, ?string $WHERE): int {
+    public function update(string $nombreTabla, string $SET, ?string $WHERE): int {
         try {
             if ($WHERE != null) {
                 $sql = "UPDATE $nombreTabla SET {$SET} WHERE {$WHERE}";
@@ -182,8 +216,8 @@
                 $sql = "UPDATE $nombreTabla SET {$SET}";
             }
 
-            $cnx = conexionBD::getConexion();
-            $stmt = $cnx->prepare($sql);
+            self::$_instancia = conexionBD::getConexion();
+            $stmt = self::$_instancia->prepare($sql);
 
             if ($stmt->execute()) {
                 if (in_array($nombreTabla, CHECKUPDATEON)) {
@@ -208,7 +242,7 @@
  * @param array $tables - Tablas a especificar, en un array de Strings | array("tabla1", "tabla3"[, ...])
  * @return bool - Devolverá <b>true</b> si algún campo "email" de las tablas contiene el email indicado
  */
-    function checkRegister(string $correo, array $tables) {
+    public function checkRegister(string $correo, array $tables) {
         $data = []; $cont = 0;
 
         foreach ($tables as $table) {
@@ -229,7 +263,7 @@
  * @param $correo
  * @return bool - <b>True</b> si está vacía. <b>False</b> si existen registros con ese Email.
  */
-    function comprobarVacio($tabla, $correo) {
+    public function comprobarVacio($tabla, $correo) {
         return empty(select($tabla, 'email', 'email LIKE "' . $correo . '"'));
     }
 
@@ -238,7 +272,7 @@
  * @param $tabla
  * @return string|null - 0 ó 1 Dependiendo si está confirmado el usuario o no
  */
-    function checkConfirm($email, $tabla) {
+    public function checkConfirm($email, $tabla) {
         return select($tabla, "confirm", "email LIKE '" . $email . "'")['confirm'];
     }
 
@@ -246,7 +280,7 @@
  * @param $correo - Correo a comprobar
  * @return int - Devolverá <b>3</b> si es EMPRESA; <b>4</b> para DEMANDANTE
  */
-    function tipoUsuario($correo) {
+    public function tipoUsuario($correo) {
         if (!comprobarVacio("empresas", $correo)) {
             return 3;
         }
@@ -255,7 +289,7 @@
         }
     }
 
-function redireccionarUser()
+public function redireccionarUser()
 {
     if (tipoUsuario($_SESSION['user']) == 3) {
         header("Location: index/empresa/");

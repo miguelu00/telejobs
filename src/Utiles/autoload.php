@@ -8,6 +8,8 @@
 
         if (file_exists($path_to_file)) {
             require $path_to_file;
+        } elseif (file_exists("../" . $path_to_file)) {
+            require "../" . $path_to_file;
         }
     }
 

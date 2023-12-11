@@ -1,6 +1,6 @@
 <?php
-    require_once("autoload.php");
-    include_once("conexionBD.php");
+    require_once("conexionBD.php");
+    
     if (!isset($_SESSION)) {
         session_start();
     }
@@ -93,6 +93,16 @@
         return 0;
     }
 
+    /**
+ * Insertar en la Tabla que indiquemos, introducir los campos que se quieran insertar y los datos en la tabla deseada.
+ *
+ * @param string $nombreTabla - El nombre de la tabla en que queremos hacer INSERT
+ * @param array $columnas - Las columnas sobre las que queremos insertar los datos (del siguiente param. $datos)
+ * @param array $datos - Cuantos datos como queramos insertar; en el mismo orden que los campos indicados
+ * 
+ * @return int - Devuelve 1 si hace el INSERT correctamente; 0 si no
+ *
+ */
     function insertINTO2(string $nombreTabla, array $columnas, array $datos): int {
         try {
             $sqlString = "INSERT INTO " + $nombreTabla + " (";

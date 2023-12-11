@@ -241,6 +241,102 @@ body.notifs {
     height: auto;
 }
 
+.cardEmpresa {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    padding: 5px;
+    border: 4px double mediumpurple;
+    border-radius: 10px;
+    background-color: rgba(43, 65, 85, 0.5);
+    max-width: 225px;
+    max-height: 420px;
+    margin-top: 10px;
+    margin: 7px;
+    scale: 1.0;
+    transition: 0.4s ease-in-out;
+}
+.cardEmpresa button {
+    background-color: #ffbf00;
+    transition: 0.2s ease-in;
+}
+.cardEmpresa button:hover {
+    background-color: #be8800;
+    color: black;
+    transition: 0.2s ease-out;
+    scale: 1.10;
+}
+/*
+.cardEmpresa:hover {
+    scale: 1.10;
+    transition: 0.4s ease-in-out;
+}
+*/
+.cardEmpresa input {
+    width: 50px;
+    margin-left: 4px;
+    margin-bottom: 4px;
+}
+.cardEmpresa p {
+    float: left;
+}
+.cardEmpresa h3 {
+    float: right;
+    font-size: 18px;
+}
+.cardEmpresa img {
+    text-align: center;
+    width: 7vw;
+    height: auto;
+    justify-content: center;
+}
+.cardEmpresa img::after {
+    justify-content: space-between;
+}
+
+/* Tarjetas pq. de Empresas en la vista de los usuarios Demandantes */
+.miniCardEmpresa {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 2px solid gold;
+    border-top : 1px solid sandybrown;
+    padding: 5px;
+}
+.miniCardEmpresa h4 {
+    text-align: center;
+}
+.miniCardEmpresa .imag {
+    width: 5vw;
+    height: 5vw;
+    border: 2px solid black;
+    margin-top: 5px;
+    vertical-align: middle;
+    justify-content: center;
+    text-align: center;
+}
+.miniCardEmpresa img {
+    width: 90%;
+    height: auto;
+    overflow: hidden;
+}
+.miniCardEmpresa p {
+    font-size: 12px;
+    text-align: left;
+    margin-left: 5px;
+}
+.miniCardEmpresa i {
+    font-size: 12px;
+    background-color: black;
+}
+.tabCesta {
+    border: 3px solid brown;
+    border-radius: 30px;
+}
+.tabCesta td {
+    border: 1px solid black;
+
+}
+
 /*Contenedor izquierda*/
 div.content-main {
     display: grid;
