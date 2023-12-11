@@ -60,13 +60,14 @@ jQuery(function() {
 
                     }
                 }
-            break;
+                break;
             case "borrar":
                 if (confirmarDelete.toString().toUpperCase() == "SI") {
                     borrarElemID(tipoElemento, id);
                 } else {
                     mostrarError("BORRADO CANCELADO!");
                 }
+                break;
         }
         
     }
