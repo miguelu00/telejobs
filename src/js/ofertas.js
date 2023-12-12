@@ -31,14 +31,72 @@ jQuery(function() {
      * Evento del botón para crear una nueva Oferta de Empleo
      */
     $("#confirmarOferta").on("click", function(e) {
+        e.preventDefault();
         if (camposVacios()) {
-            e.preventDefault();
             $("#warnMenu1").fadeIn();
             setTimeout(function() {
                 $("#warnMenu1").fadeOut();
             }, 2500);
+        } else {
+            //Recoger datos y generar la nueva oferta de empleo.
+            let conEXP = false; let experiencia = [];
+            let habilidades = [];
+            let horario = []; let fechaFin = [];
+            let nombrePuesto = $("#puesto1").val();
+            //si se ha habilitado la experiencia, recoger dichos datos
+            if ($("#enableEXP").prop("checked")) {
+                conEXP = true;
+                $("#cajaExperiencia div").each(function(i, elem) {
+                    i = i+1;
+                    let expNombre = $("#experiencia" + i).val();
+                    let expTiempo = $("#time" + i).val();
+                    if (expNombre != "") {
+                        experiencia.push(expNombre + "_" + expTiempo);
+                    }
+                });
+            }
+            $("#cajaSkills div").each(function(i, elem) {
+                i = i+1;
+                let habil = $("#hab" + i).val();
+                habilidades.push(habil);
+            });
+
+            horario.push($("#horarioInicio").val());
+            horario.push($("#horarioFin").val());
+
+            fechaFin = $("#dateFinish").val().split("-");
+            fechaFin = "" + fechaFin[2] + "/" + fechaFin[1] + "/" + fechaFin[0];
+
+            console.log(nombrePuesto);
+            console.log(experiencia);
+            console.log(habilidades);
+            console.log(horario);
+            console.log(fechaFin);
+            let datosOferta = ["null", "3", nombrePuesto, horario[0] + "-" + horario[1], "'" + experiencia.join(",") + "'","'" +  habilidades.join(",") + "'", fechaFin];
+            crearYSubirOferta(datosOferta, conEXP);
         }
     });
+
+     /**
+     * Insertar una oferta de trabajo nueva en la BBDD, a través
+     * de llamada a la API de telejobs
+     */
+    function crearYSubirOferta(datosOferta, conEXP) {
+        $.ajax("../../Repositories/API.php", {
+            method: 'POST',
+            data: {
+                tabla: "ofertas_trab",
+                CAMPOS: "ID_Oferta, id_EMP, puesto, horario, exp_requerida, habilidades_ped, fecha_limite",
+                DATOS: datosOferta.join(",")
+            },
+            success: function(data) {
+                mostrarError("Oferta creada!");
+            },
+            error: function() {
+
+            }
+        });
+    }
 
     /**
      * Comprobar si alguno de los campos de texto del menú con ID "creador"
@@ -53,6 +111,9 @@ jQuery(function() {
                 vacios = true;
             }
         });
+        if ($("#creador input[type=date]").val() == "") {
+            vacios = true;
+        }
         return vacios;
     }
 

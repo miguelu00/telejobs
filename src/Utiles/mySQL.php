@@ -103,17 +103,22 @@
  * @return int - Devuelve 1 si hace el INSERT correctamente; 0 si no
  *
  */
-    function insertINTO2(string $nombreTabla, array $columnas, array $datos): int {
+    function insertINTO2(string $nombreTabla, array $columnas = ["*"], array $datos): int {
         try {
-            $sqlString = "INSERT INTO " + $nombreTabla + " (";
+            $sqlString = "INSERT INTO " + $nombreTabla;
 
-            foreach ($columnas as $col) {
-                $sqlString .= $col . ",";
+            if ($columnas != ["*"]) {
+                $sqlString .= " (";
+                foreach ($columnas as $col) {
+                    $sqlString .= $col . ",";
+                }
+
+                $sqlString = substr($sqlString, 0, strlen($sqlString)-1); //quitar la coma al final
+                $sqlString .= ")";    //añadir el paréntesis, y el resto de String SQL
+                $sqlString .= " VALUES (";
+            } else {
+                $sqlString .= " VALUES(";
             }
-
-            $sqlString = substr($sqlString, 0, strlen($sqlString)-1); //quitar la coma al final
-            $sqlString .= ")";    //añadir el paréntesis, y el resto de String SQL
-            $sqlString .= " VALUES (";
 
             foreach ($datos as $dato) {
                 $sqlString .= "'" . $dato . "', ";
@@ -133,6 +138,34 @@
             return -1; //se ha producido un error.
         }
     }
+
+    /**
+ * Insertar en la Tabla que indiquemos, introducir los campos que se quieran insertar y los datos en la tabla deseada.
+ *
+ * @param string $nombreTabla - El nombre de la tabla en que queremos hacer INSERT
+ * @param array $columnas - Las columnas sobre las que queremos insertar los datos (del siguiente param. $datos)
+ * @param array $datos - Cuantos datos como queramos insertar; en el mismo orden que los campos indicados
+ * 
+ * @return int - Devuelve 1 si hace el INSERT correctamente; 0 si no
+ *
+ */
+function insertINTO3(string $nombreTabla, string $columnas, string $datos): int {
+    try {
+        $sqlString = "INSERT INTO " . $nombreTabla . " (" .
+                $columnas . ") VALUES (" .
+                $datos . ")";
+
+        $cnx = conexionBD::getConexion();
+        $stmt = $cnx->prepare($sqlString);
+
+        if ($stmt->execute()) {
+            return 1;
+        }
+        return 0;
+    } catch (Exception $e) {
+        return -1; //se ha producido un error.
+    }
+}
 
 /**
  * Orden DELETE FROM para una tabla, POR DEFECTO se borra la primera fila.

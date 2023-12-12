@@ -74,10 +74,21 @@
                             <!--AÑADIR habilidades con JS + modal-->
                         </div>
                     </div>
-
                     <br>
-
-                    <button id="confirmarOferta" type="submit">Crear oferta!</button> <span id="warnMenu1" class="warning" hidden>Antes debes completar todos los campos!</span>
+                    <div id="cajaHorario">
+                        <label for="horario">Horario</label> &nbsp; 
+                        <select name="dianoc" id="dianoc">
+                            <option value="diurno">Diurno</option>
+                            <option value="nocturno">Nocturno</option>
+                        </select>
+                        <br>
+                        <label for="horarioInicio">de</label>&nbsp;<input type="number" max="24" min="0" value="8" id="horarioInicio" name="horarioInicio"/> &nbsp;
+                        <label for="horarioFin">a</label> &nbsp; <input type="number" max="24" min="0" value="16" id="horarioFin" name="horarioFin"/>
+                    </div>
+                    <br>
+                    <label for="dateFinish">Fecha límite para candidaturas</label>&nbsp;  <input type="date" id="dateFinish" name="dateFinish"/>
+                    <br><br>
+                    <button class="btnConfirm" id="confirmarOferta" type="submit">Crear oferta!</button> <span id="warnMenu1" class="warning" hidden>Antes debes completar todos los campos!</span>
                 </form>
             </div>
         </div>
@@ -86,7 +97,8 @@
         <!--<div style="position: absolute; top:0; left:0; transform:translateX(-50%) translateY(-50%);"></div>-->
     </div>
 <!--    HIDDEN Input para recoger datos de Sesión-->
-    <input type="hidden" id="nomEmp" name="nomEmp" value="<?php echo $_SESSION['userData']['nombre']; ?>">
+    <input type="hidden" id="nomEmp" name="nomEmp" value="<?php echo $_SESSION['userData']['nombre']; ?>"/>
+    <input type="hidden" id="idEmp" name="idEmp" value="<?php echo $_SESSION['userData']['id_EMP']; ?>"/>
     </body>
     <script src="../../js/ofertas.js"></script>
     <script src="../../Utiles/cookies.js"></script>

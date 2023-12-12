@@ -58,14 +58,19 @@
                 exit();
             }
             if (isset($_REQUEST['CAMPOS'])) {
-                if (insertINTO2($_REQUEST['tabla'], $_REQUEST['CAMPOS'], $_REQUEST['DATOS'])) {
+                if (insertINTO3($_REQUEST['tabla'], $_REQUEST['CAMPOS'], $_REQUEST['DATOS']) == 1) {
                     echo json_encode([
                         "status" => 201,
                         "data" => select($_REQUEST['tabla'], "*")
                     ]);
+                    devolverCodigoHTTP(CRUD_Int::SUCCESS_DONE);
+                    exit();
                 } else {
-
+                    devolverCodigoHTTP(CRUD_Int::SERVER_ERROR);
+                    exit();
                 }
+            } else {
+                devolverCodigoHTTP(CRUD_Int::BAD_REQUEST);
             }
             break;
         case 'GET':

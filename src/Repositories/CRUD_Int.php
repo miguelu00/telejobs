@@ -13,10 +13,13 @@
         const TABLA_HABILIDADES = "habilidades";
         const TABLA_OFERTAS = "ofertas_trab";
         const TABLA_RECUPERACION = "recup_cuenta";
+        const SERVER_ERROR = 500;
+        const BAD_GATEWAY = 502;
         const NOT_FOUND = 404;
         const FORBIDDEN = 403;
         const UNAUTHORIZED = 401;
         const BAD_REQUEST = 400;
+        const SUCCESS_DONE = 202;
         const SUCCESS = 200;
         
         public function __construct() {
