@@ -41,8 +41,12 @@
             </div>
         </aside>
         <div class="main-view">
-            <div id="mostrarOfertas" class="hidden menu2">
-                <!-- Mostrar ofertas ya publicadas, en BBDD -->
+            <div id="mostrarOfertas" class="hidden menu0">
+                <img class="ajax-loadingmd" id="ajax-loadOfertas" src="../../img/loading-gif.gif"/>
+                
+            </div>
+            <div id="">
+
             </div>
             <div id="creador" class="hidden menu1">
                 <form action="#">
@@ -70,6 +74,7 @@
                     <div id="cajaSkills">
                         <div>
                             <label for="hab1">Habilidad 1</label> <select name="hab1" id="hab1"></select>
+                            <img class="ajax-loading" id="ajax-loadHabilidades" src="../../img/loading-gif.gif"/>
                             &nbsp;<button id="addHabil" name="addHabil">+</button>
                             <!--AÑADIR habilidades con JS + modal-->
                         </div>
@@ -96,7 +101,7 @@
         <dialog style="z-index: 4; position: absolute; top: 10%; left: 70%;" id="dialogoError"></dialog>
         <!--<div style="position: absolute; top:0; left:0; transform:translateX(-50%) translateY(-50%);"></div>-->
     </div>
-<!--    HIDDEN Input para recoger datos de Sesión-->
+<!--    HIDDEN Input para recoger datos de Sesión; todo cambiar por Cookies-->
     <input type="hidden" id="nomEmp" name="nomEmp" value="<?php echo $_SESSION['userData']['nombre']; ?>"/>
     <input type="hidden" id="idEmp" name="idEmp" value="<?php echo $_SESSION['userData']['id_EMP']; ?>"/>
     </body>

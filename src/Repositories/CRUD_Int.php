@@ -19,7 +19,7 @@
         const FORBIDDEN = 403;
         const UNAUTHORIZED = 401;
         const BAD_REQUEST = 400;
-        const SUCCESS_DONE = 202;
+        const SUCCESS_DONE = 201;
         const SUCCESS = 200;
         
         public function __construct() {

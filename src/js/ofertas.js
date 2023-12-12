@@ -11,7 +11,11 @@ jQuery(function() {
     /**
      * Se almacenará en esta variable las habilidades tomadas por AJAX/BBDD
      */
-    var datosHabils;
+    var datosHabils = null;
+    var datosOfertas = null;
+
+    //Mostrar las ofertas generadas por la empresa actual en pantalla
+
 
     $("#crearOferta").on("click", abrirCreador); //Abrir/cerrar menú de crear ofertas
     $("#addExp").on("click", agregarExp); //agregar experiencia con botón (+)
@@ -67,12 +71,7 @@ jQuery(function() {
             fechaFin = $("#dateFinish").val().split("-");
             fechaFin = "" + fechaFin[2] + "/" + fechaFin[1] + "/" + fechaFin[0];
 
-            console.log(nombrePuesto);
-            console.log(experiencia);
-            console.log(habilidades);
-            console.log(horario);
-            console.log(fechaFin);
-            let datosOferta = ["null", "3", nombrePuesto, horario[0] + "-" + horario[1], "'" + experiencia.join(",") + "'","'" +  habilidades.join(",") + "'", fechaFin];
+            let datosOferta = ["null", $("#idEmp").val(), "'" + nombrePuesto + "'", "'" + horario[0] + "-" + horario[1] + "'", "'" + experiencia.join(",") + "'","'" +  habilidades.join(",") + "'", "'" + fechaFin + "'"];
             crearYSubirOferta(datosOferta, conEXP);
         }
     });
@@ -82,18 +81,20 @@ jQuery(function() {
      * de llamada a la API de telejobs
      */
     function crearYSubirOferta(datosOferta, conEXP) {
+        let datosOf = datosOferta.join(",");
         $.ajax("../../Repositories/API.php", {
             method: 'POST',
             data: {
                 tabla: "ofertas_trab",
                 CAMPOS: "ID_Oferta, id_EMP, puesto, horario, exp_requerida, habilidades_ped, fecha_limite",
-                DATOS: datosOferta.join(",")
+                DATOS: datosOf
             },
             success: function(data) {
-                mostrarError("Oferta creada!");
+                console.log(JSON.parse(data));
+                alert("Oferta creada!");
             },
-            error: function() {
-
+            error: function(data) {
+                mostrarError("ERROR al generar la oferta deseada!");
             }
         });
     }
@@ -127,10 +128,12 @@ jQuery(function() {
         if (toggle) {
             $("#crearOferta").addClass("active");
             $("#creador").fadeIn();
+            $("#mostrarOfertas").fadeOut();
             $("nav h3").html("Creando oferta de Empleo para " + "<b>" + nombreEMP + "</b>");
             return true;
         }
         $("#creador").fadeOut();
+        $("#mostrarOfertas").fadeIn();
         $("nav h3").html(defaultTitle);
 
     }
@@ -259,14 +262,26 @@ jQuery(function() {
                     success: function(data) {
                         //Códigos 200...
                         datosHabils = JSON.parse(data);
-                        mostrarSelectHabilidades(JSON.parse(data), idCampo);
                     },
                     error: function() {
                         //Códigos 300/400...
                         mostrarError("ERROR AJAX. Pongase en contacto con el Administrador!");
                     }
-                })
-            break;
+                });
+                break;
+            case "ofertas_trab":
+                $.ajax("../../Repositories/API.php", {
+                    type: 'GET',
+                    data: {
+                        tabla: "ofertas_trab"
+                    },
+                    success: function(data) {
+                        datosOfertas = JSON.parse(data);
+                    },
+                    error: function() {
+                        mostrarError("ERROR AJAX. Pongase en contacto con el Administrador!");
+                    }
+                });
         }
     }
 
@@ -382,6 +397,11 @@ jQuery(function() {
         );
         return divContenedor;
     }
+
+    function mostrarOfertas(datos) {
+        
+    }
+
     function limpiarEstilos() {
         $("#crearOferta").removeClass("active");
         $("#trashOferta").removeClass("active");
@@ -399,4 +419,15 @@ jQuery(function() {
 
     
     hacerQuery("habilidades", "hab" + contador2);
+    hacerQuery("ofertas_trab", "mostrarOfertas");
+
+    //esperamos a que terminen las tareas asíncronas, antes de quitar los gif de carga
+    while (datosHabils == null) {
+        
+    }
+    mostrarSelectHabilidades(datosHabils, "hab" + contador2);
+    while (datosOfertas == null) {
+
+    }
+    mostrarOfertas(datosOfertas);
 });

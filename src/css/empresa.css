@@ -407,7 +407,15 @@ footer.footer-emp {
 
 .footer-emp {
     position: relative;
+}
 
+img.ajax-loading {
+    max-width: 30px;
+    max-height: 30px;
+}
+img.ajax-loadingmd {
+    max-width: 60px;
+    max-height: 60px;
 }
 .main-body {
     background: var(--bgImageEMP) no-repeat center fixed;
