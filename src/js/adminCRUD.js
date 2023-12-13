@@ -145,16 +145,27 @@ jQuery(function() {
      * @param tablaAEditar - La TABLA en BBDD sobre la que se realizará el UPDATE
      * @param id - El ID del elemento a actualizar en la @tablaAEditar indicada
      */
-    function actualizarAJAX(camposEdit, tablaAEditar, id) {
-        camposEdit.join()
+    function actualizarAJAX(camposEdit, tablaAEditar, id, campoID) {
+        let datosSET = "";
+        for (let i=0; i<camposEdit.length-1; i++) {
+            datosSET += camposEdit[i];
+            datosSET += "=";
+            datosSET += "'" + camposEdit[i+1] + "',";
+        }
+        //cuando termine el bucle for, eliminar la coma que se queda al final
+        datosSET = datosSET.substring(0, datosSET.length-1);
         $.ajax("../Repository/API.php", {
             method: "PUT",
             data: {
                 tabla: tablaAEditar,
-
+                DATOS_SET: datosSET,
+                WHERE: campoID + " = " + id
             },
             success: function(data) {
 
+            },
+            error: function() {
+                
             }
         })
     }
