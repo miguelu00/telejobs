@@ -99,6 +99,17 @@ jQuery(function() {
     function accion(e) {
         //Recojo el ID del objeto a Editar de la fila
         let tipoElemento = e.target.id.substring(0,1);
+        let nombreTabla = ""; let campoID = "";
+        switch (tipoElemento) {
+            case "E": nombreTabla = "empresas"; campoID = "id_EMP";
+            break;
+            case "D": nombreTabla = "demandantes"; campoID = "id_DEM";
+            break;
+            case "O": nombreTabla = "ofertas_trab"; campoID = "ID_Oferta";
+            break;
+            case "H": nombreTabla = "habilidades"; campoID = "IDHabil";
+            break;
+        }
         let accion = e.target.id.substring(1, 6);
         let id = parseInt(e.target.id.substring(7));
         let filaTDs = e.target.parentElement.parentElement
@@ -107,7 +118,7 @@ jQuery(function() {
         if (accion.contains('editar')) {
             //Pasaremos el ID del elemento en la fila que hemos seleccionado.
             actualizarAJAX(
-                recogerCamposEdit(filaTDs)
+                recogerCamposEdit(filaTDs), nombreTabla, id, campoID
             );
         }
         if (accion.contains('borrar')) {
@@ -147,11 +158,12 @@ jQuery(function() {
      */
     function actualizarAJAX(camposEdit, tablaAEditar, id, campoID) {
         let datosSET = "";
-        for (let i=0; i<camposEdit.length-1; i++) {
+        for (let i=0; i<camposEdit.length-1; i+=2) {
             datosSET += camposEdit[i];
             datosSET += "=";
             datosSET += "'" + camposEdit[i+1] + "',";
         }
+        //TODO - PROBAR ESTO, ELIMINAR y REPARAR REGISTRO VAMO!!!
         //cuando termine el bucle for, eliminar la coma que se queda al final
         datosSET = datosSET.substring(0, datosSET.length-1);
         $.ajax("../Repository/API.php", {
@@ -167,7 +179,7 @@ jQuery(function() {
             error: function() {
                 
             }
-        })
+        });
     }
 
     function confirmarDelete(id, tipo) {
