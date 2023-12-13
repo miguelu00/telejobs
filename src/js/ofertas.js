@@ -41,6 +41,18 @@ jQuery(function() {
             setTimeout(function() {
                 $("#warnMenu1").fadeOut();
             }, 2500);
+            return false;
+        }
+        if (!document.querySelector("form#creacionOferta").checkValidity()) {
+            $("#creacionOferta").each(function(i, elem) {
+                if (!elem.checkValidity()) {
+                    $("#warnMenu1").fadeIn();
+                    setTimeout(function() {
+                        $("#warnMenu1").fadeOut();
+                    }, 2500);
+                    return false;
+                }
+            });
         } else {
             //Recoger datos y generar la nueva oferta de empleo.
             let conEXP = false; let experiencia = [];
@@ -246,46 +258,6 @@ jQuery(function() {
     }
 
     /**
-     * Pide y recoge los datos a JQuery, que hará una petición a la API de telejobs.
-     * 
-     * @param tabla - La tabla de mySQL sobre la que queremos realizar la consulta.
-     * @param idCampo - El ID del campos sobre el que se plasmaran los datos de la consulta a la API.
-     */
-    function hacerQuery(tabla, idCampo) {
-        switch (tabla) {
-            case "habilidades":
-                $.ajax("../../Repositories/API.php", {
-                    type: 'GET',
-                    data: {
-                        tabla: "habilidades"
-                    },
-                    success: function(data) {
-                        //Códigos 200...
-                        datosHabils = JSON.parse(data);
-                    },
-                    error: function() {
-                        //Códigos 300/400...
-                        mostrarError("ERROR AJAX. Pongase en contacto con el Administrador!");
-                    }
-                });
-                break;
-            case "ofertas_trab":
-                $.ajax("../../Repositories/API.php", {
-                    type: 'GET',
-                    data: {
-                        tabla: "ofertas_trab"
-                    },
-                    success: function(data) {
-                        datosOfertas = JSON.parse(data);
-                    },
-                    error: function() {
-                        mostrarError("ERROR AJAX. Pongase en contacto con el Administrador!");
-                    }
-                });
-        }
-    }
-
-    /**
      * Mostrará en el select indicado con id 'idCampo', los datos recogidos en el parámetro 'data'.
      * Y devolverá dichos datos.
      * 
@@ -399,6 +371,56 @@ jQuery(function() {
     }
 
     function mostrarOfertas(datos) {
+        //Comprobamos si "datos" es un Objeto (JSON de 1 fila), ó un Array (JSON tras consulta de varias filas)
+        if (datos.ID_Campo == null) {
+            limpiarContainerOfertas();
+            //si se trata de un Array, agregará las ofertas al modelo una a una
+            for (let oferta of datos) {
+                document.querySelector("#mostrarOfertas").appendChild(addModeloOferta(oferta));
+            }
+        } else {
+            limpiarContainerOfertas();
+            document.querySelector("#mostrarOfertas").appendChild(addModeloOferta(datos));
+        }
+    }
+
+    /**
+     * Mostrar los datos de la oferta que pasamos por parámetro,
+     * en una Vista sobre la pantalla principal de las ofertas.
+     * 
+     * @param data - Los datos de la oferta actual.
+     * @returns Un elemento DIV con los datos de la oferta pasados por argumento
+     */
+    function addModeloOferta(data) {
+        let puesto = data.puesto;
+        
+        let horarioSplit = data.horario.split("-");
+        let horarioInicio = horarioSplit[0]; let horarioFin = horarioSplit[1];
+
+        let li1 = document.createElement("li");
+        li1.innerHTML = "De <b>" + horarioInicio + "</b> a <b>" + horarioFin + "</b>";
+
+        let li2 = document.createElement("li");
+        li2.innerHTML = "Disponible hasta <b>" + data.fecha_limite + "</b>";
+        
+        
+        let habilidades = data.habilidades_ped;
+        
+        let experienciaTodo = data.exp_requerida;
+        let experienciaSplit1 = experienciaTodo.split(",");
+        let experiencias = experienciaSplit1.split("_");
+
+        let h2 = document.createElement("h2");
+        h2.setAttribute("id", "h2" + data.ID_Oferta);
+        h2.innerText = puesto;
+
+        let ul = document.createElement("ul");
+        ul.setAttribute("id", "ul" + data.ID_Oferta);
+
+        
+
+        let h3 = document.createElement("h3");
+        h3.setAttribute("id", "h3" + data.ID_Oferta);
         
     }
 
@@ -406,6 +428,10 @@ jQuery(function() {
         $("#crearOferta").removeClass("active");
         $("#trashOferta").removeClass("active");
         $("#avisarUser").removeClass("active");
+    }
+
+    function limpiarContainerOfertas() {
+        $("#mostrarOfertas").html("");
     }
 
     function mostrarError(texto) {
@@ -417,17 +443,53 @@ jQuery(function() {
         });
     }
 
+    /**
+     * Pide y recoge los datos a JQuery, que hará una petición a la API de telejobs.
+     * 
+     * @param tabla - La tabla de mySQL sobre la que queremos realizar la consulta.
+     * @param idCampo - El ID del campos sobre el que se plasmaran los datos de la consulta a la API.
+     */
+    function hacerQuery(tabla, idCampo) {
+        switch (tabla) {
+            case "habilidades":
+                $("#ajax-loadHabilidades").fadeIn();
+                $.ajax("../../Repositories/API.php", {
+                    type: 'GET',
+                    data: {
+                        tabla: "habilidades"
+                    },
+                    success: function(data) {
+                        //Códigos 200...
+                        datosHabils = JSON.parse(data);
+                        $("#ajax-loadHabilidades").fadeOut("fast");
+                        mostrarSelectHabilidades(datosHabils, idCampo);
+                    },
+                    error: function() {
+                        //Códigos 300/400...
+                        mostrarError("ERROR AJAX. Pongase en contacto con el Administrador!");
+                    }
+                });
+                break;
+            case "ofertas_trab":
+                $("#ajax-loadOfertas").fadeIn();
+                $.ajax("../../Repositories/API.php", {
+                    type: 'GET',
+                    data: {
+                        tabla: "ofertas_trab"
+                    },
+                    success: function(data) {
+                        datosOfertas = (JSON.parse(data)).data;
+                        $("#ajax-loadOfertas").fadeOut("fast");
+                        mostrarOfertas(datosOfertas);
+                    },
+                    error: function() {
+                        mostrarError("ERROR AJAX. Pongase en contacto con el Administrador!");
+                    }
+                });
+        }
+    }
+
     
     hacerQuery("habilidades", "hab" + contador2);
     hacerQuery("ofertas_trab", "mostrarOfertas");
-
-    //esperamos a que terminen las tareas asíncronas, antes de quitar los gif de carga
-    while (datosHabils == null) {
-        
-    }
-    mostrarSelectHabilidades(datosHabils, "hab" + contador2);
-    while (datosOfertas == null) {
-
-    }
-    mostrarOfertas(datosOfertas);
 });

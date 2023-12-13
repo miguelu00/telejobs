@@ -66,6 +66,7 @@ body.body-config .main-config div.menuOpciones:hover {
     background-color: rgba(253, 155, 27, 0.69);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    color: rgba(130, 149, 187, 0.8);
 }
 body.body-config .main-config div#menu {
     width: 100%;
@@ -110,6 +111,7 @@ body.body-config .main-config div#menu button.danger-link {
     color: red;
     font-weight: bold;
 }
+
 body.body-config .main-config div.menuOpciones .danger-link {
     color: red;
     background-color: #800000;
@@ -409,11 +411,11 @@ div#data1 a#targetLink {
 a.editToggle {
     text-decoration: underline;
     font-weight: bold;
-    color: #007bfa;
+    color: #002d5a;
     cursor: pointer;
 }
 a.editToggle:hover {
-    color: #0B2A68;
+    color: #000000;
 }
 .flex-profile {
     display: flex;

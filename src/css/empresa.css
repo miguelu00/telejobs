@@ -27,6 +27,8 @@ body {
         transform: translateY(100px);
     }
 }
+/* GESTIÓN DE OFERTAS POR EMPRESAS */
+/*Ventana principal del creador de ofertas*/
 .main-view #creador {
     background: rgba(0, 187, 255, 0.6);
     backdrop-filter: blur(5px);
@@ -133,14 +135,15 @@ aside.aside-izq div h2 {
 }
 
 button.btnConfirm {
-    background-color: chartreuse;
-    color: rgb(78, 78, 78);
+    background-color: rgb(77, 153, 0);
+    color: rgb(0, 0, 0);
     border-radius: 20px;
     padding: 8px 15px;
+    transition: 0.1s;
 }
 button.btnConfirm:hover {
-    background-color: rgb(77, 153, 0);
-    color: black;
+    transition: 0.1s;
+    background-color: rgb(102, 203, 0);
 }
 /*.no-border {*/
 /*    border: unset;*/

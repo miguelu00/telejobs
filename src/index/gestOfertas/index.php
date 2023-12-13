@@ -43,13 +43,13 @@
         <div class="main-view">
             <div id="mostrarOfertas" class="hidden menu0">
                 <img class="ajax-loadingmd" id="ajax-loadOfertas" src="../../img/loading-gif.gif"/>
-                
+
             </div>
             <div id="">
 
             </div>
             <div id="creador" class="hidden menu1">
-                <form action="#">
+                <form id="creacionOferta" action="#">
                     <label for="puesto1">Se busca personal para... </label><input id="puesto1" name="puesto1" type="text" placeholder="Puesto de trabajo"/>
                     <br><br>
                     <b style="font-family: Bahnschrift, Arial, sans-serif; font-size: 24px;">Experiencia?</b>

@@ -1,4 +1,4 @@
-//Pagina configuración - se comparte tanto en la página de Empresa como de Demandante
+//Pagina configuración - se comparte tanto en la página de Empresa como en la de Demandante
 
 jQuery(function() {
     var menuMainContainer = document.querySelector("#menu"),
@@ -8,7 +8,7 @@ jQuery(function() {
     if (TIPOUSER === "demandantes") {
         menuMainContainer.style.backgroundColor = "rgba(255,255,46,0.69)";
     } else if (TIPOUSER === "empresas") {
-        menuMainContainer.style.backgroundColor = "rgba(0,178,255,0.8)";
+        menuMainContainer.style.backgroundColor = "rgba(130, 149, 187,0.8)";
     }
 
     //Lógica para resaltar/esconder los menús

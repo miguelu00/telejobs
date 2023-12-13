@@ -40,16 +40,20 @@
     }
 
 
-
+    /**
+     * SEGÚN EL MÉTODO HTTP CON QUE SE LLAMA A LA API, SE REALIZARÁ
+     * UNA FUNCIÓN DE BBDD U OTRA.
+     * 
+     * Comprobación de variables en todos los campos.
+     */
     switch ($req_method) {
         case 'PUT':
             // UPDATE CON TODOS LOS DATOS
-            if (!isset($_REQUEST['datos'])) {
-                if (!str_contains($_SESSION['perm'], "rw")) {
-                    devolverCodigoHTTP(CRUD_Int::FORBIDDEN);
-                    exit();
-                }
+            if (!isset($_REQUEST['DATOS_SET']) || !isset($_REQUEST['tabla']) || !isset($_REQUEST['WHERE'])) {
+                devolverCodigoHTTP(CRUD_Int::BAD_REQUEST);
+                exit();
             }
+            $result = update($_REQUEST['tabla'], )
             break;
         case 'POST':
             // CREATE - CREAR UN NUEVO REGISTRO / DEVUELVE ALGUN DATO
@@ -99,14 +103,20 @@
             break;
         case 'PATCH':
             // UPDATE (SOLO CIERTOS DATOS DE UN REGISTRO)
-            //Uso de POST para evitar cambios/acceso no autorizados
             if (in_array($_REQUEST['tabla'], $tablasList)) {
-                $return = update($_POST['tabla'], "", "");
+                $return = update($_REQUEST['tabla'], $_REQUEST['CAMPOS_SET'], $_REQUEST['WHERE']);
+                if ($return == 1) {
+
+                }
             }
+            
             break;
         case 'DELETE':
             //DELETE UNO O VARIOS DATOS DE UN REGISTRO
-            
+            if (in_array($_REQUEST['tabla'], $tablasList)) {
+                
+            }
+            $borrado = deleteFrom($_REQUEST['tabla'], $_REQUEST['WHERE']);
             break;
     }
 

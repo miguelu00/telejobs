@@ -31,16 +31,18 @@ $(document).ready(function() {
     }
     document.querySelector("form").addEventListener("submit", checkearLogin);
 
-    let btnAdminBackdoor = document.querySelector("input#adminConf");
+    let btnAdminBackdoor = document.querySelector("input#inADMIN");
     btnAdminBackdoor.addEventListener("click", function(e) {
 
         let user = document.querySelector("#username").value;
         let passwd = document.querySelector("#passwd").value;
 
-        if (user == "admin123@root" && passwd == "4321") {
-            document.location.replace("../index/admin.php");
+        if (user == "" || passwd == "") {
+            e.preventDefault();
+            return;
         }
-        console.log("click");
+
+        document.location.replace("login.php?inADMIN=true&username=" + user + "&passwd=" + passwd);
     });
 //Elimina el evento para comprobar datos en AJAX, SÓLO si los datos están CORRECTOS
     function hacerLogin() {

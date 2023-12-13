@@ -15,6 +15,10 @@ if (isset($_REQUEST['inENTERPRISE'])) {
     ingresar(1, $user, $passwd);
 }
 
+if (isset($_REQUEST['inADMIN'])) {
+    ingresar(2, $user, $passwd);
+}
+
 if (isset($_GET['confirmarCorreo'])) {
     confirmarCuenta($_GET['confirmarCorreo'], $_GET['tipoRegistro'], $_GET['token']);
 }
@@ -128,6 +132,16 @@ function ingresar(int $tipo, string $usuario, string $contra) {
                 echo "<h2>ERROR en el ingreso</h2><br><br>Compruebe que ha introducido bien su email--contraseña";
             }
             break;
+        case 2:
+            //Login admin
+            $datosUser = select('adminAcc', '*', 'user LIKE "' . $usuario . '"');
+            if (count($datosUser) > 0 && password_verify($contra, $datosUser['passwd'])) {
+                $_SESSION['user'] = $datosUser['user'];
+                header('Location: ../index/admin.php');
+            } else {
+                echo "<h2>ERROR en el ingreso como ADMIN. Credenciales incorrectas ó no existe la cuenta admin!</h2>";
+            }
+        break;
     }
 }
 

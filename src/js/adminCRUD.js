@@ -9,13 +9,16 @@ jQuery(function() {
     var datosDem = obtenerDatos("demandantes");
 
     */
-    
-    let campoCodPostalDem = document.querySelector("#cPostalDem");
-    campoCodPostalDem.on("keyup", function(e) {
-        darProvincia($(this).val());
+
+    var datosRecibir = null;
+
+    $("#tablaEMPRESAS tr button[type=button]").each(function(i, elem) {
+        $(this).on("click", function(e) {
+            rellenarCamposEdit(e);
+        });
     });
-    let campoCodPostalEmp = document.querySelector("#cPostalEmp");
-    campoCodPostalEmp.on("keyup", function(e) {
+
+    $("#cPostalDem").on("keyup", function(e) {
         darProvincia($(this).val());
     });
 
@@ -23,91 +26,137 @@ jQuery(function() {
         alert("Escriba el Código postal en el campo de arriba,\ny se actualizará este campo adecuadamente.");
     });
 
-    let consultaDems = obtenerDatos("demandantes");
-
+    let esperar3s = setTimeout(hacerEditables, 2500);
 
     /**
-     * Listener para el evento en que hagamos clic en un botón de la tabla,
-     * eligirá qué hacer dependiendo del ID que tenga (incluye el ID del elemento y su acción)
+     * Si hacemos doble clic en los elementos de la tabla, estos se
+     * harán editables, similar a en PHPMyAdmin.
+     * Una vez terminemos, al presionar Editar todos los value's
+     * de la fila que editamos se actualizarán.
      */
-    function editarCampos(e) {
+    function hacerEditables() {
+        let elementsTabla = document.querySelectorAll("div.mainContainer div.tablaCrud table td");
+        for (let elem of elementsTabla) {
+            elem.addEventListener('dblclick', function(e) {
+                e.stopPropagation();
+                let campoTxt = document.createElement('input');
+                campoTxt.setAttribute('value', e.target.innerText);
+                campoTxt.setAttribute('type', 'text');
+                campoTxt.setAttribute('class', 'areaTexto1');
+                campoTxt.setAttribute('name', e.target.name);
+                campoTxt.setAttribute('style', 'width: inherit; height: auto;');
+
+                elem.replaceChild(campoTxt, elem.firstChild);
+                campoTxt.removeEventListener('dblClick', e.event);
+
+                /**
+                 * let butonSave = document.createElement('button');
+                 butonSave.innerHTML = "<img src='../imgs/guardar.png' alt='SAVE'/>";
+                 butonSave.style.width = "15px";
+                 butonSave.setAttribute('name', 'enviar' + e.target.name);
+                 butonSave.addEventListener('click', function(e) {
+
+                 campoTxt.parentElement.appendChild(butonSave);
+                });
+                 */
+                e.target.removeEventListener('dblclick', e.event);
+                //campoTxt.addEventListener('ke', actualizarTxt(campoTxt.value));
+            });
+        }
+        let btnesAccion = document.getElementsByClassName('actions');
+        for (const div of btnesAccion) {
+            for (const boton of div.children) {
+                boton.addEventListener('click', accion);
+            }
+        }
+    }
+    function editarOculto(e) {
+        e.target.parentElement.nextElementSibling.value = e.target.innerText;
+    }
+    function recogerCamposEdit(numRow) {
+        var datos = [];
+        $("#editarP-" + numRow).parent().parent().children().even().not("td.actions").each(function(){
+            //datos.push($(this).value);
+            if ($(this).html().startsWith('<input')) {
+                if ($(this).find('input:first').prop('name') == 'pvp') {
+                    let valorCampo = $(this).find('input:first').val();
+                    if (!isNaN(parseInt(valorCampo)) && !isNaN(parseFloat(valorCampo))) {
+                        datos.push($(this).find('input:first').val());
+                    } else {
+                        alert("El precio debe ser un num. entero/decimal válido!");
+                        //datos = null;
+                        return false;
+                    }
+                } else {
+                    datos.push($(this).find('input:first').val());
+                }
+            } else {
+                datos.push($(this).html());
+            }
+        });
+        return datos;
+    }
+    function accion(e) {
         //Recojo el ID del objeto a Editar de la fila
         let tipoElemento = e.target.id.substring(0,1);
         let accion = e.target.id.substring(1, 6);
         let id = parseInt(e.target.id.substring(7));
-        let filaTDs = e.target.parentElement.parentElement.children;
-
-        switch (accion) {
-            case "editar":
-                
-                for (td of filaTDs) {
-                //Sacar valor y poner en el formulario del Modal de edición correspondiente
-                    let datosArray = sacarDatosID(tipoElemento, id);
-                    if (tipoElemento == "D") {
-                        $("#idDem").val(datosArray['id_DEM']);
-                        $("#habilidadesDem").val(datosArray['skill_ids']);
-                        $("#experienciaDem").val(datosArray['experiencia']);
-                        $("#nombreDem").val(datosArray['nombre']);
-                        $("#apellidosDem").val(datosArray['apellidos']);
-                        $("#fechaNacDem").val(datosArray['fechaNac']);
-                        $("#tlfDem").val(datosArray['tlf']);
-                        $("#cPostalDem").val(datosArray['cPost']);
-                        $("#municipioDem").val(datosArray['munip']);
-                    }
-                    if (tipoElemento == "E") {
-
-                    }
-                }
-                break;
-            case "borrar":
-                if (confirmarDelete.toString().toUpperCase() == "SI") {
-                    borrarElemID(tipoElemento, id);
-                } else {
-                    mostrarError("BORRADO CANCELADO!");
-                }
-                break;
+        let filaTDs = e.target.parentElement.parentElement
+            .querySelectorAll("td:not(:first-child, :nth-child(2))");
+        
+        if (accion.contains('editar')) {
+            //Pasaremos el ID del elemento en la fila que hemos seleccionado.
+            actualizarAJAX(
+                recogerCamposEdit(filaTDs)
+            );
+        }
+        if (accion.contains('borrar')) {
+            if (confirm('¿Seguro que desea borrar el ID ' + idProd + '?')) {
+                borraAJAX(idProd);
+            }
+            //Si no, no hacer nada...
         }
     }
-    
-    //tipoElemento -> si se trata de Empresa (E) ó Demandante (D)
-    function sacarDatosID(tipoElemento, id) {
-        //Si el ID es -1 (menos uno), sacar todos los datos de la tabla. En caso contrario, los del ID pasado
-        let conID = (id != -1) ? true : false;
-        if (conID) {
-            if (tipoElemento == "D") {
-                let datos = obtenerDatos("demandantes", id);
-                if (datos.length > 0 && datos.length == 1) {
-                    return datos;
-                } else {
-                    return null;
-                }
-            }
-            if (tipoElemento == "E") {
-                let datos = obtenerDatos("empresas", id);
-                if (datos.length > 0 && datos.length == 1) {
-                    return datos;
-                } else {
-                    return null;
-                }
+
+    /**
+     * Guardará los datos de los campos de texto que se hayan editado
+     */
+    function recogerCamposEdit(listaTD) {
+        let arrayDatosEdit = [];
+        for (let dato of listaTD) {
+            //clave => el atributo 'name' que guarda el nombre de la columna
+            arrayDatosEdit.push(dato.getAttribute("name"));
+            //valor => Ó bien el texto del elemento <td>...
+            if (dato.innerText != "") {
+                arrayDatosEdit.push(dato.innerText);
+            } else {
+                arrayDatosEdit.push(dato.children[0].value); //... o el VALOR del ELEMENTO INTERNO (input de tipo texto)
             }
         }
 
-        if (tipoElemento == "D") {
-            let datos = obtenerDatos("demandantes");
-            if (datos.length > 0 && datos.length == 1) {
-                return datos;
-            } else {
-                return null;
+        return arrayDatosEdit;
+    }
+
+    /**
+     * Actualizará en la base de datos los datos correspondientes a los campos que se han editado
+     * 
+     * @param camposEdit - Un Array ASOCIATIVO con los datos de los campos editados
+     * al dar doble click && resto de campos sin editar.
+     * @param tablaAEditar - La TABLA en BBDD sobre la que se realizará el UPDATE
+     * @param id - El ID del elemento a actualizar en la @tablaAEditar indicada
+     */
+    function actualizarAJAX(camposEdit, tablaAEditar, id) {
+        camposEdit.join()
+        $.ajax("../Repository/API.php", {
+            method: "PUT",
+            data: {
+                tabla: tablaAEditar,
+
+            },
+            success: function(data) {
+
             }
-        }
-        if (tipoElemento == "E") {
-            let datos = obtenerDatos("empresas");
-            if (datos.length > 0 && datos.length == 1) {
-                return datos;
-            } else {
-                return null;
-            }
-        }
+        })
     }
 
     function confirmarDelete(id, tipo) {
@@ -124,19 +173,18 @@ jQuery(function() {
     }
     
     //Poblar datos de las dos tablas: Empresas y Demandantes (usando AJAX)
-    function obtenerDatos(tabla) {
+    function obtenerDatos(tabla, id, campoID) {
         $.ajax("../Repositories/API.php", {
             type : "GET",
             data : {
-                "select": tabla
+                "tabla": tabla,
+                "WHERE": "'" + campoID + "'=" + id
             },
             success : function(datosRecibidos){
-                if (datosRecibidos === -1) {
-                    //mostrarError(""SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
-                    //" de Base de Datos no esté activo." + 
-                    //" Si el problema persiste, póngase en contacto con un" +
-                    //" Administrador del Sistema ó con el desarrollador");
-                    console.log("SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
+                datosRecibir = (JSON.parse(datosRecibidos)).data;
+            },
+            error: function() {
+                console.log("SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
                     " de Base de Datos no esté activo." + 
                     " Si el problema persiste, póngase en contacto con un" +
                     " Administrador del Sistema ó con el desarrollador");
@@ -145,38 +193,8 @@ jQuery(function() {
                     " Si el problema persiste, póngase en contacto con un" +
                     " Administrador del Sistema ó con el desarrollador");
                     return;
-                }
-
-
-                return (JSON.parse(datosRecibidos)).data;
             }
         });
-    }
-
-    //Poblar datos de las dos tablas: Empresas y Demandantes (usando AJAX)
-    function obtenerDatos(tabla, id) {
-        $.ajax("getDatosAdmin.php", {
-            type : "POST",
-            data : {
-                "select": tabla,
-                "id": id
-            },
-            success : function(datosRecibidos){
-                if (datosRecibidos === -1) {
-                    //mostrarError(""SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
-                    //" de Base de Datos no esté activo." + 
-                    //" Si el problema persiste, póngase en contacto con un" +
-                    //" Administrador del Sistema ó con el desarrollador");
-                    console.log("SE HA PRODUCIDO UN ERROR! Puede que el servicio" +
-                    " de Base de Datos no esté activo." + 
-                    " Si el problema persiste, póngase en contacto con un" +
-                    " Administrador del Sistema ó con el desarrollador");
-                    return;
-                }
-
-                return (JSON.parse(datosRecibidos)).data;
-            }
-        })
     }
 
     /**

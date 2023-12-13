@@ -41,7 +41,7 @@
                     <a class="butt-login" href="../registro/index.php">REGISTRO</a></p>
                 </div>
                 <div class="align-r-selfR ">
-                    <input class="med-sz" title="Configuración ADMIN" type="button" name="adminConf" id="adminConf" value="🛠"/>
+                    <input class="med-sz" title="Configuración ADMIN" type="submit" name="inADMIN" id="inADMIN" value="🛠"/>
                 </div>
             </form>
         </fieldset>
