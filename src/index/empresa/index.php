@@ -19,6 +19,8 @@
     if ($userD == null) {
         header("Location: ../demandantes/");
     }
+
+    $ofertas = select("ofertas_trab", "*");
 ?>
 <html lang="es">
     <head>
@@ -87,58 +89,46 @@
                 <div style="float: right; margin: 10px 15px 0 0;" class="spinner1">
                     <label for="numOfertas">Mostrar máx.: </label><input class="spinner1" id="numOfertas" type="number" min="3" max="10" value="5"/>
                     <br>
-                    <p style="margin-top: 0; margin-right: 5px; text-align: right;">perfiles</p>
+                    <p style="margin-top: 0; margin-right: 5px; text-align: right;">ofertas</p>
                 </div>
+                <?php
+                if ($ofertas != null) {
+                    if (array_key_exists("ID_Oferta", $ofertas)) {
+                        $arrExperiencia = explode(",", $ofertas['exp_requerida']);
+                        echo "
+                        <div class='cardOferta2'>
+                        <h2>" . $ofertas['puesto'] . "</h2>
+                        <p>Horario: De " . $ofertas['horario'] . "h.</p>" .
+                        "<br> Experiencia requerida:
+                        <ul>";
+                        foreach ($arrExperiencia as $exp) {
+                            echo "<li>" . $exp . "</li>";
+                        }
+                        echo "
+                        </ul>
+                            <p>Fecha limite: {$ofertas['fecha_limite']}</p>
+                        </div>";
+                    } else {
+                        foreach ($ofertas as $oferta) {
+                            $arrExperiencia = explode(",", $oferta['exp_requerida']);
+                            echo "
+                            <div class='cardOferta2'>
+                            <h2>" . $oferta['puesto'] . "</h2>
+                            <p>Horario: De " . $oferta['horario'] . "h.</p>" .
+                            "<br> Experiencia requerida:
+                            <ul>";
+                            foreach ($arrExperiencia as $exp) {
+                                echo "<li>" . $exp . "</li>";
+                            }
+                            echo "
+                            </ul>
+                                <p>Fecha limite: {$oferta['fecha_limite']}</p>
+                            </div>";
+                        }
+                    }
+                }
+                ?>
                 <br>
-                <div id="ajax-ofertas" class="">
-                    <div>
-                        <div class="cardOferta slider">
-                            <h4>Oracle Developer</h4>
-                            <p class="red offer-status">24/04/2023</p>
-                        </div>
-                        <div class="slidee">
-                            <div class="offer-info">
-                                <h3><a href="">Usuario Gonzalez</a></h3>
-                                <details>
-                                    <summary>Habilidades: <span style="color: green">Con <b>2</b> habilidades en común</span>
-                                    </summary>
-                                    <div>
-                                        <ul>
-                                            <li><b>Nº1</b> Trabajo en Equipo</li>
-                                            <li><b>Nº3</b> HTML Básico</li>
-                                            <li><b>Nº8</b> SQL<li>
-                                            <li><b>Nº9</b> Oracle Developer</li>
-                                            <li><b>Nº5</b> Gestión de Equipos</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                        <br>
-                        <a href="">Ver PERFIL</a>
-                    </div>
-                    <div>
-                        <div class="cardOferta slider">
-                            <h4>Cirujano</h4>
-                            <p class="offer-status">15/06/2023</p>
-                        </div>
-                        <div class="slidee">
-                            <div class="offer-info">
-                                <h3>Migue Fuentes</h3>
-                                <details>
-                                    <summary>Habilidades: <span style="color: red">Con <b>1</b> habilidad en común</span>
-                                    </summary>
-                                    <div>
-                                        <ul>
-                                            <li><b>Nº1</b> Trabajo en Equipo</li>
-                                            <li><b>Nº10</b> Enfermeria</li>
-                                            <li><b>Nº4</b> Organización y gestión de situaciones difíciles</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

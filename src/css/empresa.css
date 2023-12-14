@@ -54,6 +54,21 @@ body {
 .main-view .menu1 button {
     scale: 1.2;
 }
+.main-view .menu0 {
+    display: flex;
+    flex-flow: row wrap;
+    width: inherit;
+    height: 100%;
+}
+.main-view .menu2 div{
+    width: fit-content;
+    height: 10%;
+    vertical-align: middle;
+
+    background-color:rgba(74, 148, 0, 0.5);
+    padding: 10px;
+}
+
 .pag-ofertas .main-view {
     background: var(--bgOfertasEMP) no-repeat;
     background-position: center;
@@ -93,8 +108,9 @@ aside.aside-izq div h2 {
 }
 /*Contenido principal EMPRESAS*/
 .main-view {
-    width: 90%;
+    width: 86%;
     height: 100%;
+
 
     padding: 2vw 0 0 2vw;
     backdrop-filter: grayscale(0.8);
@@ -112,6 +128,24 @@ aside.aside-izq div h2 {
     transition: 0.5s ease-in-out;
 }
 .main-view .cardOferta:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: 0.5s ease-in-out;
+}
+.main-view .cardOferta2 {
+    width: fit-content;
+    align-self: flex-start;
+    margin: 2px 7px 2px 7px;
+    height: fit-content;
+    padding: 5px 10px 5px 10px;
+
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: 0.5s ease-in-out;
+}
+.main-view .cardOferta2:hover {
     background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);

@@ -18,6 +18,7 @@ jQuery(function() {
 
 
     $("#crearOferta").on("click", abrirCreador); //Abrir/cerrar menú de crear ofertas
+    $("#trashOferta").on("click", abrirEliminarOferts);
     $("#addExp").on("click", agregarExp); //agregar experiencia con botón (+)
     $("#addHabil").on("click", agregarHabil); //agregar habilidades con el botón (+)
     $("#enableEXP").on("click", function() {
@@ -31,8 +32,41 @@ jQuery(function() {
         });
     });//Desactivar div de "Experiencia"
 
+    $("#delOferta").on("click", function() {
+        if (confirm("¿Seguro que quiere eliminar su oferta de trabajo num. " + $("#ofertaDel").val() + "?")) {
+            AJAXBorrar("ofertas_trab", $("#ofertaDel").val());
+        }
+    });
+
+    function AJAXBorrar(tablaBorrar, id) {
+        let campoID = "";
+        switch(tablaBorrar) {
+            case "ofertas_trab":
+                campoID = "ID_Oferta";
+            break;
+            case "empresas":
+                campoID = "id_EMP";
+            break;
+        }
+        $.ajax("../Repositories/API.php", {
+            method: "POST",
+            data: {
+                tabla: tablaBorrar,
+                WHERE: campoID + "=" + id,
+                accion: "DELETE"
+            },
+            success: function(data) {
+                alert("Oferta eliminada correctamente!");
+                document.location.reload();
+            },
+            error: function(data) {
+                alert("Se ha producido un error! Póngase en contacto con el Administrador");
+            }
+        });
+    }
+
     /**
-     * Evento del botón para crear una nueva Oferta de Empleo
+     * Evento para el botón que abre el menú creador para una nueva Oferta de Empleo
      */
     $("#confirmarOferta").on("click", function(e) {
         e.preventDefault();
@@ -139,13 +173,40 @@ jQuery(function() {
         (!toggle) ? toggle=true : toggle=false;
         if (toggle) {
             $("#crearOferta").addClass("active");
-            $("#creador").fadeIn();
-            $("#mostrarOfertas").fadeOut();
-            $("nav h3").html("Creando oferta de Empleo para " + "<b>" + nombreEMP + "</b>");
+            $("#mostrarOfertas").fadeOut(function() {
+                $("#creador").fadeIn();
+            });
+            $("#eliminarOfertas").fadeOut();
+            $("nav h3").html("Creando oferta de Empleo para " + "<b>" + nombreEMP + "</b>.");
             return true;
         }
-        $("#creador").fadeOut();
-        $("#mostrarOfertas").fadeIn();
+        $("#creador").fadeOut(function() {
+            $("#mostrarOfertas").fadeIn();
+        });
+        
+        $("nav h3").html(defaultTitle);
+
+    }
+
+    /**
+     * Abrir/cerrar el menú para eliminar ofertas
+     */
+    function abrirEliminarOferts() {
+        limpiarEstilos();
+        //Marcar como activado/desactivado el menú para crear ofertas de trabajo
+        (!toggle) ? toggle=true : toggle=false;
+        if (toggle) {
+            $("#trashOferta").addClass("active");
+            $("#mostrarOfertas").fadeOut(function() {
+                $("#eliminarOfertas").fadeIn();
+            });
+            $("nav h3").html("Seleccione una oferta de " + "<b>" + nombreEMP + "</b> para eliminar.");
+            $("#creador").fadeOut();
+            return true;
+        }
+        $("#eliminarOfertas").fadeOut(function() {
+            $("#mostrarOfertas").fadeIn();
+        });
         $("nav h3").html(defaultTitle);
 
     }
@@ -372,7 +433,7 @@ jQuery(function() {
 
     function mostrarOfertas(datos) {
         //Comprobamos si "datos" es un Objeto (JSON de 1 fila), ó un Array (JSON tras consulta de varias filas)
-        if (datos.ID_Campo == null) {
+        if (datos.ID_Campo != null) {
             limpiarContainerOfertas();
             //si se trata de un Array, agregará las ofertas al modelo una a una
             for (let oferta of datos) {
@@ -491,5 +552,5 @@ jQuery(function() {
 
     
     hacerQuery("habilidades", "hab" + contador2);
-    hacerQuery("ofertas_trab", "mostrarOfertas");
+    //hacerQuery("ofertas_trab", "mostrarOfertas");
 });

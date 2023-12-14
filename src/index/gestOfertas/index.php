@@ -2,8 +2,15 @@
     session_start();
     if ($_SESSION['userData'] == null) {
         header("Location: ../../index.php?checkLogin=true");
+        exit();
+    } elseif (!array_key_exists("id_EMP", $_SESSION['userData'])) {
+        header("Location: ../redirect.php");
+        exit();
     }
+    require_once("../../Utiles/mySQL.php");
     //require_once "../../Utiles/comprobarSesion.php";
+
+    $ofertas = select("ofertas_trab", "*", "id_EMP=" . $_SESSION['userData']['id_EMP']);
 ?>
 <html lang="en">
     <head>
@@ -37,13 +44,48 @@
             <div class="flex-centered-col">
                 <button id="crearOferta"><i class="fa fa-plus"></i> Publicar oferta</button>
                 <button id="trashOferta"><i class="fa fa-minus"></i> Descartar oferta</button>
-                <button id="avisarUser"><i class="fa fa-paper-plane"></i> Notificar usuario </button>
+                <!--<button id="avisarUser"><i class="fa fa-paper-plane"></i> Notificar usuario </button>-->
             </div>
         </aside>
         <div class="main-view">
-            <div id="mostrarOfertas" class="hidden menu0">
-                <img class="ajax-loadingmd" id="ajax-loadOfertas" src="../../img/loading-gif.gif"/>
-
+            <div id="mostrarOfertas" class="menu0">
+                <?php
+                if ($ofertas != null) {
+                    if (array_key_exists("ID_Oferta", $ofertas)) {
+                        $arrExperiencia = explode(",", $ofertas['exp_requerida']);
+                        echo "
+                        <div class='cardOferta2'>
+                        <h2>" . $ofertas['puesto'] . "</h2>
+                        <p>Horario: De " . $ofertas['horario'] . "h.</p>" .
+                        "<br> Experiencia requerida:
+                        <ul>";
+                        foreach ($arrExperiencia as $exp) {
+                            echo "<li>" . $exp . "</li>";
+                        }
+                        echo "
+                        </ul>
+                            <p>Fecha limite: {$ofertas['fecha_limite']}</p>
+                        </div>";
+                    } else {
+                        foreach ($ofertas as $oferta) {
+                            $arrExperiencia = explode(",", $oferta['exp_requerida']);
+                            echo "
+                            <div class='cardOferta2'>
+                            <h2>" . $oferta['puesto'] . "</h2>
+                            <p>Horario: De " . $oferta['horario'] . "h.</p>" .
+                            "<br> Experiencia requerida:
+                            <ul>";
+                            foreach ($arrExperiencia as $exp) {
+                                echo "<li>" . $exp . "</li>";
+                            }
+                            echo "
+                            </ul>
+                                <p>Fecha limite: {$oferta['fecha_limite']}</p>
+                            </div>";
+                        }
+                    }
+                }
+                ?>
             </div>
             <div id="creador" class="hidden menu1">
                 <form id="creacionOferta" action="#">
@@ -94,15 +136,23 @@
                 </form>
             </div>
             <div id="eliminarOfertas" class="hidden menu2">
-                <div class="">
+                <div>
                     <form action="#">
                         <label for="selectOfertas">
                             Selecciona una oferta: 
                         </label>
                         <select name="ofertaDel" id="ofertaDel">
-
+                            <?php
+                            if (array_key_exists("ID_Oferta", $ofertas)) {
+                                echo "<option value='{$ofertas['ID_Oferta']}'>{$ofertas['puesto']} limite: {$ofertas['fecha_limite']}</option>";
+                            } else {
+                                foreach ($ofertas as $oferta) {
+                                    echo "<option value='{$oferta['ID_Oferta']}'>{$oferta['puesto']} limite: {$oferta['fecha_limite']}</option>";
+                                }
+                            }
+                            ?>
                         </select>
-                        <br>
+                            <button type="button" name="delOferta" id="delOferta">X</button>
                     </form>
                 </div>
             </div>

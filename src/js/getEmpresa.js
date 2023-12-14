@@ -20,7 +20,10 @@ jQuery(function() {
 
         let h4_slider = document.createElement("h4");
         let p_slider = document.createElement("p");
-        p_slider.classList.add("red");
+
+        if (fechaAntesDe(datosOferta.fecha_limite)) {
+            p_slider.classList.add("red");
+        }
         p_slider.classList.add("offer-status");
 
         divSlider.appendChild(h4_slider);
@@ -89,7 +92,7 @@ jQuery(function() {
         if (dia > parseInt(arrayFecha[0])) {
             return false;
         }
-
+        return true;
     }
 
     function obtenerDatos(tabla) {

@@ -57,7 +57,7 @@ $token = password_hash($mailDestino, PASSWORD_DEFAULT);//codigo aleatorio para P
 <body>
 <?php
 //Cargar el autoload de Composer
-require "../../vendor/autoload.php";
+require "../vendor/autoload.php";
 //Crear objeto PHPMailer, y usar sus diversas opciones/settings
 $mail = new PHPMailer(true);
 

@@ -5,7 +5,7 @@ Aplicación web para gestionar ofertas de trabajo.
 # MENÚ ADMIN - ACCESO
 
 Usuario: admin123@root
-Passwd: 4321
+Passwd: admin4321
 
 # Qué tiene por ahora
 - Una página principal, tanto para EMPRESAS como DEMANDANTES

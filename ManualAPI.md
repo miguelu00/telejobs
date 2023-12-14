@@ -3,7 +3,7 @@
 Se usará la siguiente URL:
     http://telejobs.net/Repositories/API.php
 
-Método por defecto de Return:
+Return por defecto de las consultas:
 <b>JSON</b>
 
 Lenguaje usado:
@@ -11,7 +11,7 @@ PHP + mySQL DB (con PHPMyAdmin)
 
     Según el método de HTTP que usemos, habrá diferencias tanto en las respuestas que recibamos de la API, como de los datos que debemos darle.
 
-# PUT
+# PUT - inutilizable
     Habrá que pasarle
 
 "tabla" --> representa la TABLA sobre la que queremos <b>actualizar</b> datos.
@@ -26,7 +26,9 @@ PHP + mySQL DB (con PHPMyAdmin)
 
 "tabla" --> la tabla sobre la que queremos INSERTAR datos/resources
 
-"CAMPOS" [opcional] --> si lo especificamos, limitará los valores que vamos a insertar sobre los campos especificados
+"CAMPOS" [opcional] --> si lo especificamos, limitará los valores que vamos a insertar sobre los campos especificados.
+
+"accion" [opcional] --> le indicará al método POST qué debe hacer (si bien eliminar tablas [DELETE], actualizar [UPDATE] ...).
 
 
 # GET
@@ -39,7 +41,7 @@ PHP + mySQL DB (con PHPMyAdmin)
 "WHERE" [opcional] --> Si queremos limitar la consulta para que cumpla una o varias condiciones lógicas/mySQL
 
 
-# PATCH
+# PATCH - inutilizable (hacer por POST)
     Como parámetros
 
 "tabla" --> TABLA sobre la que se actualizará un dato concreto
@@ -49,7 +51,7 @@ PHP + mySQL DB (con PHPMyAdmin)
 "WHERE" [opcional] --> Limitar la actualización para que cumpla una o varias condiciones lógicas/mySQL
 
 
-# DELETE
+# DELETE - inutilizable (hacer por POST)
     Como parámetros tendrá
 
 "tabla" --> La TABLA sobre la que BORRAREMOS los datos.
