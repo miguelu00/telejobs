@@ -6,7 +6,7 @@ jQuery(function() {
         TIPOUSER = document.querySelector("#tipoUser").value;
 
     if (TIPOUSER === "demandantes") {
-        menuMainContainer.style.backgroundColor = "rgba(255,255,46,0.69)";
+        menuMainContainer.style.backgroundColor = "rgba(199, 167, 0, 0.7)";
     } else if (TIPOUSER === "empresas") {
         menuMainContainer.style.backgroundColor = "rgba(130, 149, 187,0.8)";
     }

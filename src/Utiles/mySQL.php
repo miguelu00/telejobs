@@ -19,7 +19,7 @@
  * @param string $cond_WHERE - OPCIONAL condición WHERE SQL para los resultados
  * @param int $orderby - OPCIONAL Ordenar los datos según criterios mySQL
  * @param int $LIMIT - OPCIONAL Limitar el nº de registros que se devuelven, por defecto no se limitan.
- * @return array|null - Devuelve un <b>array</b> asociativo con los resultados de la CONSULTA SELECT (segun PDO), <b>NULL</b> si no encuentra nada
+ * @return array|null - Devuelve un <b>array</b> asociativo con los resultados de la CONSULTA SELECT (segun PDO), <b>NULL</b> si la consulta no devuelve nada
  *
  */
     function select($nombreTabla, $campo='*', $cond_WHERE=null, $orderby = 1, $LIMIT = null): array|null
@@ -203,7 +203,7 @@ function insertINTO3(string $nombreTabla, string $columnas, string $datos): int 
 /**
  * @param $nombreTabla - Nombre de la tabla en la que actualizar los valores
  * @param $SET - [Indicador SET] Campos que cambiar, y sus valores; [ "CAMPO1= 'X', CAMPO2= 55, ..."]
- * @param $WHERE - [Indicador WHERE] condiciones a seguir al aplicar el SET; recuerde que los VARCHAR deberán ir entre comillas dobles/simples
+ * @param $WHERE - [Indicador WHERE] condiciones a seguir al aplicar el SET; recuerda que los VARCHAR deberán ir entre comillas dobles/simples
  * @return int - Devuelve <b>1</b> si se consigue actualizar; <b>0</b> si se falla
  */
     function update(string $nombreTabla, string $SET, ?string $WHERE): int {
@@ -285,6 +285,9 @@ function insertINTO3(string $nombreTabla, string $columnas, string $datos): int 
         }
         if (!comprobarVacio("demandantes", $correo)) {
             return 4;
+        }
+        if (!empty(select("adminacc", 'user', 'user LIKE "' . $correo . '"'))) {
+            return 1;
         }
     }
 

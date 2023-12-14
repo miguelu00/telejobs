@@ -54,6 +54,6 @@ PHP + mySQL DB (con PHPMyAdmin)
 
 "tabla" --> La TABLA sobre la que BORRAREMOS los datos.
 
-"WHERE" [opcional] --> Limitar la consulta para que cumpla una o varias condiciones lógicas/mySQL. Si no se especifica, se borrará LA PRIMERA FILA.
+"WHERE" [opcional] --> Limitar la consulta para que cumpla una o varias condiciones lógicas/mySQL. Si no se especifica, se devolverá un error 400 - BAD REQUEST
 
 *Para poder usar el método DELETE en tablas importantes ['DEMANDANTES', 'EMPRESAS', 'CANDIDATURAS', 'OFERTAS_TRAB'], deberemos emplear una clave de API de ADMIN. En caso contrario, recibiremos un error 403 - FORBIDDEN*

@@ -19,8 +19,16 @@
         const FORBIDDEN = 403;
         const UNAUTHORIZED = 401;
         const BAD_REQUEST = 400;
+        const SUCCESS_ALLDONE = 204;
+        const SUCCESS_NOTDONE = 202;
         const SUCCESS_DONE = 201;
         const SUCCESS = 200;
+
+        const TABLASLIST = ["candidaturas", "categoria_emp", "demandantes", "empresas", "habilidades", "ofertas_trab", "recup_cuenta"];
+        /**
+         * Estas tablas son las que tendrán los datos CRÍTICOS como CANDIDATURAS, EMPRESAS, OFERTAS_TRAB
+         */
+        const CRITICALTABLES = ["candidaturas", "empresas", "demandantes", "ofertas_trab"];
         
         public function __construct() {
             new PDO('mysql:host=localhost:3307;dbname=' . self::BDNAME, self::USERNAME, self::PASSWD);

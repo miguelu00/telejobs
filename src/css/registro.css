@@ -21,7 +21,7 @@ div.container1 h1 {
 }
 fieldset {
     border: 2px solid gray;
-    border-radius: 2%;
+    border-radius: 15px;
 }
 fieldset legend {
     text-align: center;

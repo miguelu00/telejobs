@@ -26,9 +26,9 @@ body div.tablaCrud h2 {
 }
 
 .tabla-datos th {
-    background-color: rgb(18, 18, 131);
+    background-color: rgb(0, 0, 149);
     color: white;
-    border-right: 1px solid gray;
+    border-right: 1px solid rgb(110, 110, 110);
 }
 
 .tabla-datos tr td {
@@ -56,8 +56,8 @@ body div.tablaCrud h2 {
 }
 
 .tabla-datos tr td button img {
-    max-width: 15pt;
-    max-height: 15pt;
+    max-width: 19pt;
+    max-height: 19pt;
 }
 
 .tabla-datos td button.edit {

@@ -12,12 +12,6 @@ jQuery(function() {
 
     var datosRecibir = null;
 
-    $("#tablaEMPRESAS tr button[type=button]").each(function(i, elem) {
-        $(this).on("click", function(e) {
-            rellenarCamposEdit(e);
-        });
-    });
-
     $("#cPostalDem").on("keyup", function(e) {
         darProvincia($(this).val());
     });
@@ -26,19 +20,25 @@ jQuery(function() {
         alert("Escriba el Código postal en el campo de arriba,\ny se actualizará este campo adecuadamente.");
     });
 
+
+    //Los campos para editar se harán editables tras 3 segundos... Así, evitamos que el usuario
+    // edite dichos campos antes de que cargue por completo el DOM.
     let esperar3s = setTimeout(hacerEditables, 2500);
 
     /**
-     * Si hacemos doble clic en los elementos de la tabla, estos se
+     * Esta función habilita que: si hacemos doble clic en los elementos de la tabla, estos se
      * harán editables, similar a en PHPMyAdmin.
      * Una vez terminemos, al presionar Editar todos los value's
-     * de la fila que editamos se actualizarán.
+     * de la fila que editamos se actualizarán sobre su respectiva fila
+     * en la tabla de BBDD.
      */
     function hacerEditables() {
-        let elementsTabla = document.querySelectorAll("div.mainContainer div.tablaCrud table td");
+        let elementsTabla = document.querySelectorAll("div.mainContainer div.tablaCrud table td:not(:first-child, :nth-child(2))");
         for (let elem of elementsTabla) {
             elem.addEventListener('dblclick', function(e) {
                 e.stopPropagation();
+                //Hacer enabled el botón de EDITAR
+                habilitarBotonEdit(e.target.parentElement);
                 let campoTxt = document.createElement('input');
                 campoTxt.setAttribute('value', e.target.innerText);
                 campoTxt.setAttribute('type', 'text');
@@ -59,46 +59,39 @@ jQuery(function() {
                  campoTxt.parentElement.appendChild(butonSave);
                 });
                  */
+                campoTxt.removeEventListener("dblclick", e.event);
                 e.target.removeEventListener('dblclick', e.event);
                 //campoTxt.addEventListener('ke', actualizarTxt(campoTxt.value));
             });
         }
-        let btnesAccion = document.getElementsByClassName('actions');
-        for (const div of btnesAccion) {
-            for (const boton of div.children) {
-                boton.addEventListener('click', accion);
-            }
-        }
+        $(".actions").each(function(i, elem) {
+            $(this).on("click", function(e) {
+                procesarAccion(e.target);
+            });
+        });
+    }
+
+    /**
+     * Función para 'hacerEditables()'
+     * Habilitará el botón de edición, y se llama una vez se ha hecho doble clic en algún campo
+     */
+    function habilitarBotonEdit(elemPadre) {
+        elemPadre.querySelectorAll("button.actions")[0].setAttribute("disabled", "false");
+        elemPadre.querySelectorAll("button.actions")[0].setAttribute("aria-disabled", "false");
     }
     function editarOculto(e) {
         e.target.parentElement.nextElementSibling.value = e.target.innerText;
     }
-    function recogerCamposEdit(numRow) {
-        var datos = [];
-        $("#editarP-" + numRow).parent().parent().children().even().not("td.actions").each(function(){
-            //datos.push($(this).value);
-            if ($(this).html().startsWith('<input')) {
-                if ($(this).find('input:first').prop('name') == 'pvp') {
-                    let valorCampo = $(this).find('input:first').val();
-                    if (!isNaN(parseInt(valorCampo)) && !isNaN(parseFloat(valorCampo))) {
-                        datos.push($(this).find('input:first').val());
-                    } else {
-                        alert("El precio debe ser un num. entero/decimal válido!");
-                        //datos = null;
-                        return false;
-                    }
-                } else {
-                    datos.push($(this).find('input:first').val());
-                }
-            } else {
-                datos.push($(this).html());
-            }
-        });
-        return datos;
-    }
-    function accion(e) {
-        //Recojo el ID del objeto a Editar de la fila
-        let tipoElemento = e.target.id.substring(0,1);
+
+    function procesarAccion(elemento) {
+        
+        let elemTarget = elemento;
+        if (elemTarget.id == "") {
+            //si no se detecta en este punto el ID, es porque hemos clickado en un elemento hijo del botón.
+            elemTarget = elemTarget.parentElement;
+        }
+        let tipoElemento = elemTarget.id.substring(0,1);
+
         let nombreTabla = ""; let campoID = "";
         switch (tipoElemento) {
             case "E": nombreTabla = "empresas"; campoID = "id_EMP";
@@ -110,25 +103,33 @@ jQuery(function() {
             case "H": nombreTabla = "habilidades"; campoID = "IDHabil";
             break;
         }
-        let accion = e.target.id.substring(1, 6);
-        let id = parseInt(e.target.id.substring(7));
-        let filaTDs = e.target.parentElement.parentElement
+        let accion = elemTarget.id.substring(1, 7);
+        //Recojo el ID del objeto a Editar de la fila
+        let id = parseInt(elemTarget.id.substring(8));
+        let filaTDs = elemTarget.parentElement.parentElement
             .querySelectorAll("td:not(:first-child, :nth-child(2))");
         
-        if (accion.contains('editar')) {
+        if (accion.includes("editar")) {
+            //Le pasaremos los campos del <TR> que estamos editando
+            let arrayDatosEdit = recogerCamposEdit(filaTDs);
+            if (arrayDatosEdit == null) {
+                return null;
+            }
             //Pasaremos el ID del elemento en la fila que hemos seleccionado.
             actualizarAJAX(
-                recogerCamposEdit(filaTDs), nombreTabla, id, campoID
+                arrayDatosEdit, nombreTabla, id, campoID
             );
         }
-        if (accion.contains('borrar')) {
-            if (confirm('¿Seguro que desea borrar el ID ' + idProd + '?')) {
-                borraAJAX(idProd);
+        if (accion.includes("borrar")) {
+            if (confirm('¿Seguro que desea borrar el elemento de ' + nombreTabla + ' con ID ' + id + '?'
+            + '\nESTA ACCIÓN NO SE PODRÁ DESHACER!')) {
+                borraAJAX(nombreTabla, id, campoID);
             }
             //Si no, no hacer nada...
         }
     }
 
+    let columnasNumericas = ["id_EMP", "id_DEM", "ID_Oferta", "IDHabil", "tlf", "cPostal", "confirm", "cv_visible"];
     /**
      * Guardará los datos de los campos de texto que se hayan editado
      */
@@ -139,8 +140,18 @@ jQuery(function() {
             arrayDatosEdit.push(dato.getAttribute("name"));
             //valor => Ó bien el texto del elemento <td>...
             if (dato.innerText != "") {
+                //si el campo a editar es un campo numérico, no dejar que se almacene otro tipo de dato
+                if (columnasNumericas.includes(dato.getAttribute("name"))) {
+                    if (!isNaN(parseInt(dato.innerText))) {
+                        alert("ERROR. Ha insertado un valor no-numérico en un campo sólo para números!");
+                        return null;
+                    }
+                }
                 arrayDatosEdit.push(dato.innerText);
             } else {
+                if (columnasNumericas.includes(dato.getAttribute("name"))) {
+
+                }
                 arrayDatosEdit.push(dato.children[0].value); //... o el VALOR del ELEMENTO INTERNO (input de tipo texto)
             }
         }
@@ -167,17 +178,42 @@ jQuery(function() {
         //cuando termine el bucle for, eliminar la coma que se queda al final
         datosSET = datosSET.substring(0, datosSET.length-1);
         $.ajax("../Repository/API.php", {
-            method: "PUT",
+            method: "POST",
             data: {
                 tabla: tablaAEditar,
                 DATOS_SET: datosSET,
-                WHERE: campoID + " = " + id
+                WHERE: campoID + " = " + id,
+                accion: "PATCH"
             },
             success: function(data) {
-
+                alert("tablas actualizadas!");
             },
-            error: function() {
-                
+            error: function(data) {
+                alert("ERROR al actualizar || " + data);
+            }
+        });
+    }
+
+    /**
+     * Eliminará en la base de datos la fila con el ID que se ha especificado.
+     * 
+     * @param tablaBorrar - La TABLA en BBDD sobre la que se realizará el DELETE.
+     * @param id - El ID del elemento a hacerle DELETE.
+     * @param campoID - Es el campo correspondiente para el ID del elemento que queremos borrar.
+     */
+    function borraAJAX(tablaBorrar, id, campoID) {
+        $.ajax("../Repositories/API.php", {
+            method: "POST",
+            data: {
+                tabla: tablaBorrar,
+                WHERE: campoID + "=" + id,
+                accion: "DELETE"
+            },
+            success: function(data) {
+                alert("Se ha borrado la entrada " + id + " de " + tablaBorrar.toUpperCase());
+            },
+            error: function(data) {
+                alert("ERROR al borrar || " + data);
             }
         });
     }

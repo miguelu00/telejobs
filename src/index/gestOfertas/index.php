@@ -45,9 +45,6 @@
                 <img class="ajax-loadingmd" id="ajax-loadOfertas" src="../../img/loading-gif.gif"/>
 
             </div>
-            <div id="">
-
-            </div>
             <div id="creador" class="hidden menu1">
                 <form id="creacionOferta" action="#">
                     <label for="puesto1">Se busca personal para... </label><input id="puesto1" name="puesto1" type="text" placeholder="Puesto de trabajo"/>
@@ -95,6 +92,19 @@
                     <br><br>
                     <button class="btnConfirm" id="confirmarOferta" type="submit">Crear oferta!</button> <span id="warnMenu1" class="warning" hidden>Antes debes completar todos los campos!</span>
                 </form>
+            </div>
+            <div id="eliminarOfertas" class="hidden menu2">
+                <div class="">
+                    <form action="#">
+                        <label for="selectOfertas">
+                            Selecciona una oferta: 
+                        </label>
+                        <select name="ofertaDel" id="ofertaDel">
+
+                        </select>
+                        <br>
+                    </form>
+                </div>
             </div>
         </div>
 

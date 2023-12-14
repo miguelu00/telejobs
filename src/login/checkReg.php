@@ -17,17 +17,13 @@ if (!comprobarEmail($correo)) {
     echo "3"; //email YA EN USO
     die();
 } else {
-    if (preg_match("/^(?=.*[A-Z])(?=.*\d).+$/", $password)) {
-        echo "1"; die(); //todo OK
-    } else {
-        echo "2"; die(); //contraseña BAD
-    }
+    echo "1"; //todo OK
 }
 
 function comprobarEmail($correo): bool
 {
     if (isset($_SESSION['tipoReg'])) {
-        $tipo = $_SESSION['tipoReg']; //Variable tipo declarada aquí, para poder usar la función con REGISTRO GOOGLE
+        $tipo = $_SESSION['tipoReg']; //Variable declarada aquí, para poder usar la función con REGISTRO GOOGLE
     } else {
         $tipo = strip_tags($_REQUEST['tipoReg']);
     }
@@ -36,8 +32,8 @@ function comprobarEmail($correo): bool
         return true;
     }
     return false;
-    //todo SI YA SE HA REGISTRADO, NO DEJAR QUE CONTINÚE POR AQUI, DEBERÁ LOGEARSE y el Login al redireccionar dirá
-    //todo si se trata de un REGISTRO de EMPRESA ó DEMANDANTE ((mediante SESIÓN!))
+    //SI YA SE HA REGISTRADO, NO DEJAR QUE CONTINÚE POR AQUI, DEBERÁ LOGEARSE y el Login al redireccionar dirá
+    //si se trata de un REGISTRO de EMPRESA ó DEMANDANTE ((mediante SESIÓN!))
 }
 
 /**
@@ -62,23 +58,21 @@ function registrarParcial($tipoRegistro) {
         } else {
             //Datos por defecto, con la foto de Perfil default
             $foto = "default_icon.jpg";
-            $email = strip_tags($_REQUEST['correo']);
-            $passwd = strip_tags($_REQUEST['password']);
-            $nombre = strip_tags($_REQUEST['correo']);
+            $email = $_REQUEST['correo'];
+            $passwd = $_REQUEST['password'];
+            $nombre = $_REQUEST['correo'];
         }
         if ($tipoRegistro == "empresa") {
             //El tipo de usuario es EMPRESA
-            if (insertInto('empresas', null, $email, password_hash($passwd, PASSWORD_DEFAULT), $foto, $nombre, '', '', '', 000000000, 00000, '', '', '', '0', '1','', date("d/m/Y h:i")) != 1) {
+            if (insertInto('empresas', null, $email, password_hash($passwd, PASSWORD_DEFAULT), $foto, $nombre, '', '', '', '', 000000000, 00000, '', '', '', '0', '1','', date("d/m/Y h:i")) != 1) {
                 $_SESSION['errores'] = "No se ha podido registrar tu correo! Chequea tu conexión y vuelve a intentarlo...";
-                header('Location: index.php');
                 return false;
             }
             unset($_SESSION['errores']);
         } elseif ($tipoRegistro == "demandante") {
             //El tipo de usuario es DEMANDANTE
-            if (insertInto('demandantes', null, '', $nombre, '', '', '', 00000, '', $_REQUEST['correo'], password_hash($_REQUEST['password'], PASSWORD_DEFAULT), $foto, '', '0', '1', date("d/m/Y h:i")) != 1) {
+            if (insertInto('demandantes', null, '', '', $nombre, '', '', 000000000, 00000, '', $_REQUEST['correo'], password_hash($_REQUEST['password'], PASSWORD_DEFAULT), $foto, '', '0', '1', date("d/m/Y h:i")) != 1) {
                 $_SESSION['errores'] = "No se ha podido registrar tu correo! Chequea tu conexión y vuelve a intentarlo...";
-                header('Location: index.php');
                 return false;
             }
             unset($_SESSION['errores']);

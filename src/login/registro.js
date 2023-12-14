@@ -4,10 +4,10 @@ jQuery(function() {
     let activo = false, sigPagina = false;
     const textoBtn = document.querySelectorAll('.elec-mode span');
     const form = document.querySelector('form'); //PRIMER FORMULARIO
+    const regExpPW = new RegExp(/^(?=.*[A-Z])(?=.*\d).+$/);
     let dialogoError = document.querySelector("#d_error");
     dialogoError.close();
 //let campErrors = [];
-    var retorno = null;
 
     form.onsubmit = validarCampos;
     $("#cpos1").on('keyup', function() {
@@ -16,7 +16,7 @@ jQuery(function() {
     $("#cpos2").on('keyup', function() {
         darProvincia($(this).val())
     });
-//Establecer un valor para el botón de elección EMPRESA/DEMANDANTE
+//Establecer un valor por defecto para el botón de elección EMPRESA/DEMANDANTE
     toggleBtn.value = "empresa";
 //Cambiar valor/estilos a través de CLICK del botón
     toggleBtn.addEventListener('click', () => {
@@ -67,7 +67,7 @@ jQuery(function() {
         }
         if(!todoBien) {
             mostrarError("Introduce un email válido!");
-            efectoShake();
+            efectoShake(); //animación hecha con CSS + JS
             return;
         }
         // Comprobación contraseñas
@@ -77,6 +77,14 @@ jQuery(function() {
             efectoShake();
             return;
         }
+
+        if (!regExpPW.test(contras[0].value)) {
+            todoBien = false;
+            mostrarError("ERROR. La contraseña debe contener al menos UNA <b>letra mayúscula</b> y UN <b>número</b>");
+            efectoShake();
+            return;
+        }
+
         if (!todoBien) {
             efectoShake()
             return;
@@ -139,6 +147,7 @@ jQuery(function() {
     function checkAjax() {
         let email = document.querySelector("#email").value;
         let contra = document.querySelector("#password").value;
+
         $.ajax('../login/checkReg.php', {
             type: "POST",
             data: {
@@ -147,12 +156,14 @@ jQuery(function() {
                 'tipoReg': toggleBtn.value
             },
             beforeSend: function() {
-                $("fieldset.registro").fadeOut();
                 $(".loading-gif").show();
             },
             complete: function() {
                 $(".loading-gif").hide();
-                switch(retorno) {
+            },
+            success: function(data) {
+                $("fieldset.registro").fadeOut();
+                switch(data) {
                     case "1":
                         if (toggleBtn.value == "empresa") {
                             loadNextEmp();
@@ -162,9 +173,6 @@ jQuery(function() {
                             loadNextDem();
                             return true;
                         }
-                        return false;
-                    case "2":
-                        mostrarError("ERROR. La contraseña debe contener al menos UNA <b>letra mayúscula</b> y UN <b>número</b>");
                         return false;
                     case "3":
                         if (toggleBtn.value == "empresa") {
@@ -178,11 +186,8 @@ jQuery(function() {
                         return false;
                 }
             },
-            success: function(data) {
-                retorno = data;
-            },
             error: function() {
-                mostrarError("ERROR DE CONEXIÓN a mySQL. Comprueba tu conexión e intentalo de nuevo. Si el problema persiste, póngase en contacto con el Administrador en mafvpersonal@gmail.com.");
+                mostrarError("ERROR DE CONEXIÓN a mySQL. Comprueba tu conexión e intentalo de nuevo. Si el problema persiste, póngase en contacto con el Administrador en <b>mafvpersonal@gmail.com</b>.");
             }
         });
         //TODO Devolver TRUE/FALSE de forma NO ASÍNCRONA [ESE ES EL FALLO!!!]
@@ -270,9 +275,10 @@ jQuery(function() {
                 let select = $("#actividad1");
                 data = JSON.parse(data);
                 data = data.data;
-
-                for (dato of data) {
-                    select.html(select.html() + "<option value='" + dato.actividad_p + "'>" + dato.actividad_p + "</option>");
+                if (data != null) {
+                    for (dato of data) {
+                        select.html(select.html() + "<option value='" + dato.actividad_p + "'>" + dato.actividad_p + "</option>");
+                    }
                 }
             }
         });
@@ -301,7 +307,7 @@ jQuery(function() {
                 let select = $("#habils"), datos = JSON.parse(data);
                 select.html("");
                 //Sacamos los index (ID) de los datos, como value
-                for (dato of datos) {
+                for (const dato of datos) {
                     let salida = "";
                     salida = "<option value='" + dato.IDHabil + "'>" + dato.nombre + "</option>";
                     select.html(select.html() + salida);

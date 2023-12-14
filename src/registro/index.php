@@ -145,7 +145,7 @@
 
                         <div class="flex-nums">
                             <input class="provincia1" id="provincia1" name="provincia1" type="text" value="---" disabled aria-disabled="true"/>
-                            <select class="listaMunips" name="munip2" id="listaMunips">
+                            <select class="listaMunips" name="munip2" id="listaMunips2">
                                 <!--Cargamos lista de municipios por AJAX-->
                             </select>
                             <div class="loading-gif-pq-space">
@@ -183,6 +183,5 @@
         </dialog>
     </div>
     <script src="../login/registro.js"></script>
-    <script src="../js/cookies.js"></script>
 </body>
 </html>

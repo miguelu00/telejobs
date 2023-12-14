@@ -140,12 +140,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="paginas-div">
-                    <ul>
-                        <li><button id="beforeBtn">Anterior</button></li>
-                        <li><button id="nextBtn">Siguiente</button></li>
-                    </ul>
-                </div>
             </div>
         </div>
 
