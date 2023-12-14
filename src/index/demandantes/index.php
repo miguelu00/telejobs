@@ -12,7 +12,16 @@
     } else {
         if (!isset($_SESSION['userData'])) {
             $_SESSION['userData'] = select("demandantes", "*", "email LIKE '" . $_SESSION['user'] . "'");
+            if (is_null($_SESSION['userData'])) {
+                header('Location: ../../index.php?checkLogin=true');
+            }
+            if (!array_key_exists('id_DEM', $_SESSION['userData'])) {
+                header('Location: ../../index.php?checkLogin=true');
+            }
         }
+    }
+    if (!array_key_exists('id_DEM', $_SESSION['userData'])) {
+        header('Location: ../../index.php?checkLogin=true');
     }
     $userD = $_SESSION['userData'];
     if ($userD == null) {

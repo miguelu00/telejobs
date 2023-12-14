@@ -14,7 +14,7 @@ $token = $_REQUEST['token'];
 
 
 //Cargar el autoload de Composer
-require "../../vendor/autoload.php";
+require "../vendor/autoload.php";
 //Crear objeto PHPMailer, y usar sus diversas opciones/settings
 $mail = new PHPMailer(true);
 
@@ -50,8 +50,8 @@ try {
     <p>Ha recibido este correo porque necesita recuperar el acceso a su cuenta de TELEJOBS ó ha tenido algún otro problema. <br>
     Si esto es cierto, y ha sido suya la intención tiene <b>dos opciones:</b></p>
     
-    <h4><a href='http://localhost/PROYECTO/login/login.php?eliminarCuenta={$mailDestino}&token={$token}'>ABORTAR REGISTRO</a></h4>
-    <h4><a href='http://localhost/PROYECTO/login/login.php?continuarRegistro={$mailDestino}&token={$token}'>Recuperación CUENTA</a></h4>
+    <h4><a href='http://telejobs.net/login/login.php?eliminarCuenta={$mailDestino}&token={$token}'>ABORTAR REGISTRO</a></h4>
+    <h4><a href='http://telejobs.net/login/login.php?continuarRegistro={$mailDestino}&token={$token}'>Recuperación CUENTA</a></h4>
     <br><p>Para cualquier consulta, conctacte con el Administrador en mafvpersonal@gmail.com<br>Gracias por elegir TELEJOBS</p><br><br>
     Puede ignorar este correo si no ha pedido nada de esto.";
     } else {
@@ -62,7 +62,7 @@ try {
     <p>Ha recibido este correo porque necesita recuperar el acceso a su cuenta de TELEJOBS ó ha tenido algún otro problema. <br>
     Si esto es cierto, y ha sido suya la intención tiene <b>dos opciones:</b></p>
     
-    <h4><a href='http://localhost/PROYECTO/login/login.php?continuarRegistro={$mailDestino}&token={$token}'>Recuperación CUENTA</a></h4>
+    <h4><a href='http://telejobs.net/login/login.php?continuarRegistro={$mailDestino}&token={$token}'>Recuperación CUENTA</a></h4>
     <br><p>Para cualquier consulta, conctacte con el Administrador en mafvpersonal@gmail.com<br>Gracias por elegir TELEJOBS</p><br><br>
     Puede ignorar este correo si no ha pedido nada de esto.";
     }
@@ -71,7 +71,7 @@ try {
     Ha recibido este correo porque necesita recuperar el acceso a su cuenta de TELEJOBS ó ha tenido algún otro problema.
     \n
     Si esto es cierto, y ha sido suya la intención haga clic en el siguiente enlace:
-    \n Enlace: http://localhost/PROYECTO/login/login.php?confirmarCorreo={$mailDestino}&tipoRegistro={$tipoRegistro}&token={$token}
+    \n Enlace: http://telejobs.net/login/login.php?confirmarCorreo={$mailDestino}&tipoRegistro={$tipoRegistro}&token={$token}
     \n\n Puede eliminar este correo si no ha pedido nada de esto.
     \n\n
      Gracias por elegir TELEJOBS. Para cualquier consulta, contactar con el administrador en mafvpersonal@gmail.com";

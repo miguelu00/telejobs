@@ -9,6 +9,19 @@ jQuery(function() {
     dialogoError.close();
 //let campErrors = [];
 
+    let cookie1 = getCookie("reg_parcial");
+    if (cookie1 != null) {
+        let tipoUsuario = getCookie("tipoUser");
+
+        if (tipoUsuario == 'demand') {
+            loadNextDem();
+        } else {
+            loadNextEmp();
+        }
+        setCookie("reg_parcial", null);
+        setCookie("tipoUser", null);
+    }
+
     form.onsubmit = validarCampos;
     $("#cpos1").on('keyup', function() {
         darProvincia($(this).val())
@@ -211,6 +224,22 @@ jQuery(function() {
         // }
         // })
     }
+
+    function getCookie(cookieName) {
+        let name = cookieName + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
 
     function mostrarError(texto) {
         efectoShake();

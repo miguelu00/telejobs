@@ -36,9 +36,10 @@ jQuery(function() {
         let elementsTabla = document.querySelectorAll("div.mainContainer div.tablaCrud table td:not(:first-child, :nth-child(2))");
         for (let elem of elementsTabla) {
             elem.addEventListener('dblclick', function(e) {
-                e.stopPropagation();
                 //Hacer enabled el botón de EDITAR
-                habilitarBotonEdit(e.target.parentElement);
+                habilitarBotonEdit(e.target.parentElement.parentElement);
+                //Evitar el 'event bubbling', es decir que se superpongan los eventos a los demás elementos hijos (campo de texto que se introducira en las siguientes líneas a esta)
+                e.stopPropagation();
                 let campoTxt = document.createElement('input');
                 campoTxt.setAttribute('value', e.target.innerText);
                 campoTxt.setAttribute('type', 'text');
@@ -46,7 +47,11 @@ jQuery(function() {
                 campoTxt.setAttribute('name', e.target.name);
                 campoTxt.setAttribute('style', 'width: inherit; height: auto;');
 
-                elem.replaceChild(campoTxt, elem.firstChild);
+                if (elem.firstChild != null) {
+                    elem.replaceChild(campoTxt, elem.firstChild);
+                } else {
+                    elem.appendChild(campoTxt);
+                }
                 campoTxt.removeEventListener('dblClick', e.event);
 
                 /**
@@ -76,11 +81,9 @@ jQuery(function() {
      * Habilitará el botón de edición, y se llama una vez se ha hecho doble clic en algún campo
      */
     function habilitarBotonEdit(elemPadre) {
-        elemPadre.querySelectorAll("button.actions")[0].setAttribute("disabled", "false");
-        elemPadre.querySelectorAll("button.actions")[0].setAttribute("aria-disabled", "false");
-    }
-    function editarOculto(e) {
-        e.target.parentElement.nextElementSibling.value = e.target.innerText;
+        elemPadre.querySelectorAll("button.actions")[0].removeAttribute("disabled");
+        elemPadre.querySelectorAll("button.actions")[0].removeAttribute("aria-disabled");
+        elemPadre.querySelectorAll("button.actions")[0].setAttribute("style", "color: yellow");
     }
 
     function procesarAccion(elemento) {
@@ -139,20 +142,24 @@ jQuery(function() {
             //clave => el atributo 'name' que guarda el nombre de la columna
             arrayDatosEdit.push(dato.getAttribute("name"));
             //valor => Ó bien el texto del elemento <td>...
-            if (dato.innerText != "") {
-                //si el campo a editar es un campo numérico, no dejar que se almacene otro tipo de dato
+            if (!dato.innerHTML.includes("<input")) {
+                //(si el campo a editar es un campo numérico, no dejar que se almacene otro tipo de dato)
                 if (columnasNumericas.includes(dato.getAttribute("name"))) {
-                    if (!isNaN(parseInt(dato.innerText))) {
+                    if (isNaN(parseInt(dato.innerText))) {
                         alert("ERROR. Ha insertado un valor no-numérico en un campo sólo para números!");
                         return null;
                     }
                 }
                 arrayDatosEdit.push(dato.innerText);
-            } else {
+            //... o el VALOR del ELEMENTO INTERNO (<input> de tipo texto)
+            } else { 
                 if (columnasNumericas.includes(dato.getAttribute("name"))) {
-
+                    if (isNaN(parseInt(dato.children[0].value)) && dato.children[0].value != "") {
+                        alert("ERROR. Ha insertado un valor no-numérico en un campo sólo para números!");
+                        return null;
+                    }
                 }
-                arrayDatosEdit.push(dato.children[0].value); //... o el VALOR del ELEMENTO INTERNO (input de tipo texto)
+                arrayDatosEdit.push(dato.children[0].value);
             }
         }
 
@@ -172,12 +179,16 @@ jQuery(function() {
         for (let i=0; i<camposEdit.length-1; i+=2) {
             datosSET += camposEdit[i];
             datosSET += "=";
-            datosSET += "'" + camposEdit[i+1] + "',";
+            if (isNaN(parseInt(camposEdit[i+1])) || camposEdit[i+1] == "") {
+                datosSET += "'" + camposEdit[i+1] + "',";
+            } else {
+                datosSET += camposEdit[i+1];
+            }
         }
         //TODO - PROBAR ESTO, ELIMINAR y REPARAR REGISTRO VAMO!!!
         //cuando termine el bucle for, eliminar la coma que se queda al final
         datosSET = datosSET.substring(0, datosSET.length-1);
-        $.ajax("../Repository/API.php", {
+        $.ajax("../Repositories/API.php", {
             method: "POST",
             data: {
                 tabla: tablaAEditar,
@@ -186,10 +197,10 @@ jQuery(function() {
                 accion: "PATCH"
             },
             success: function(data) {
-                alert("tablas actualizadas!");
+                alert("tabla " + tablaAEditar.toUpperCase() + " actualizada!");
             },
-            error: function(data) {
-                alert("ERROR al actualizar || " + data);
+            error: function(data, status) {
+                alert("ERROR al actualizar || " + status);
             }
         });
     }

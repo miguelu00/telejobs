@@ -277,7 +277,7 @@ function insertINTO3(string $nombreTabla, string $columnas, string $datos): int 
 
 /** Como sólo puede existir un email registrado por cada tipo de usuario, esta función indicará según este dato, si la cuenta es EMPRESA ó DEMANDANTE
  * @param $correo - Correo a comprobar
- * @return int - Devolverá <b>3</b> si es EMPRESA; <b>4</b> para DEMANDANTE
+ * @return int - Devolverá <b>3</b> si es EMPRESA; <b>4</b> para DEMANDANTE; <b>1</b> para ADMIN.
  */
     function tipoUsuario($correo) {
         if (!comprobarVacio("empresas", $correo)) {
@@ -297,5 +297,7 @@ function redireccionarUser()
         header("Location: index/empresa/");
     } elseif (tipoUsuario($_SESSION['user']) == 4) {
         header("Location: index/demandantes/");
+    } elseif (tipoUsuario($_SESSION['user']) == 1) {
+        
     }
 }

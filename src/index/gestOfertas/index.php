@@ -138,17 +138,21 @@
             <div id="eliminarOfertas" class="hidden menu2">
                 <div>
                     <form action="#">
-                        <label for="selectOfertas">
+                        <label for="ofertaDel">
                             Selecciona una oferta: 
                         </label>
                         <select name="ofertaDel" id="ofertaDel">
                             <?php
-                            if (array_key_exists("ID_Oferta", $ofertas)) {
-                                echo "<option value='{$ofertas['ID_Oferta']}'>{$ofertas['puesto']} limite: {$ofertas['fecha_limite']}</option>";
-                            } else {
-                                foreach ($ofertas as $oferta) {
-                                    echo "<option value='{$oferta['ID_Oferta']}'>{$oferta['puesto']} limite: {$oferta['fecha_limite']}</option>";
+                            if ($oferta != null) {
+                                if (array_key_exists("ID_Oferta", $ofertas)) {
+                                    echo "<option value='{$ofertas['ID_Oferta']}'>{$ofertas['puesto']} limite: {$ofertas['fecha_limite']}</option>";
+                                } else {
+                                    foreach ($ofertas as $oferta) {
+                                        echo "<option value='{$oferta['ID_Oferta']}'>{$oferta['puesto']} limite: {$oferta['fecha_limite']}</option>";
+                                    }
                                 }
+                            } else {
+                                echo "<option value='N/A'>-- No hay elementos --</option>";
                             }
                             ?>
                         </select>

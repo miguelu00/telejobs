@@ -3,9 +3,10 @@
     require_once "../Utiles/mySQL.php";
 //Recogerá los datos, y según la variable sabrá si el usuario es DEMANDANTE ó EMPRESA
 // y lo logeará
-
-$user = strip_tags($_REQUEST['username']);
-$passwd = strip_tags($_REQUEST['passwd']);
+if (isset($_REQUEST['username'], $_REQUEST['passwd'])) {
+    $user = strip_tags($_REQUEST['username']);
+    $passwd = strip_tags($_REQUEST['passwd']);
+}
 
 if (isset($_REQUEST['inPERSONAL'])) {
     ingresar(0, $user, $passwd);
@@ -22,6 +23,19 @@ if (isset($_REQUEST['inADMIN'])) {
 if (isset($_GET['confirmarCorreo'])) {
     confirmarCuenta($_GET['confirmarCorreo'], $_GET['tipoRegistro'], $_GET['token']);
 }
+
+if (isset($_GET['eliminarCuenta'])) {
+    $tipoUser = tipoUsuario($_GET['eliminarCuenta']);
+    if ($tipoUser == 3) {
+        $tabla = "demandantes";
+        $idUser = "id_DEM";
+    } else {
+        $tabla = "empresas";
+        $idUser = "id_EMP";
+    }
+
+    $idUsuario = select($tabla, $idUser, "email = " + $_GET['eliminarCuenta']);
+}
 ?>
 <html lang="es">
     <head>
@@ -34,6 +48,7 @@ if (isset($_GET['confirmarCorreo'])) {
                 echo "<title>Confirmar cuenta... - TELEJOBS</title>";
             }
         ?>
+        <script src="../js/jquery-3.6.3.js"></script>
         <link rel="icon" href="">
         <style>
             body {
@@ -83,6 +98,31 @@ if (isset($_GET['confirmarCorreo'])) {
     </head>
     <body>
 <?php
+    if (isset($_GET['eliminarCuenta'])) {
+        echo "
+            
+            <script>
+            if (confirm('Ha elegido ELIMINAR su cuenta de Telejobs. ESTA ACCIÓN NO SE PODRÁ DESHACER, ¿está segura/o?')) {
+                borrarAJAX();
+            }
+            function borrarAJAX() {
+                $.ajax('../Repositories/API.php', {
+                    method: 'POST',
+                    data: {
+                        tabla: {$tabla},
+                        WHERE: {$idUser} + '=' + {$idUsuario["$idUser"]},
+                        accion: 'DELETE'
+                    },
+                    success: function(data) {
+                        alert('Hecho! su cuenta de Telejobs ha sido eliminada');
+                        document.location.reload();
+                    }
+                });
+            }
+                
+            </script>
+        ";
+    }
     if (isset($_GET['continuarRegistro'])) {
         echo "<div class='recup1'>";
             echo "<h2><b>CONTINUAR REGISTRO en TELEJOBS</b></h2>";

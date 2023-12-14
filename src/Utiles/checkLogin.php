@@ -26,6 +26,9 @@ if (comprobarVacio("empresas", $email) && comprobarVacio("demandantes", $email))
     if ($tipoUsuario == 4)
         $contraCorrecta = password_verify($password, select("demandantes", "passwd", "email LIKE '" . $email . "'")['passwd']);
 
+    if ($tipoUsuario == 1) {
+        redireccionarUser();
+    }
     if (isset($contraCorrecta)) {
         $contraCorrecta ? $errors['loginCorrecto']="1" : $errors['loginCorrecto']="0";
     }

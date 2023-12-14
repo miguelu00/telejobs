@@ -2,6 +2,7 @@
     session_start();
     include_once("../Utiles/mySQL.php");
     include_once("../Utiles/comprobarSesion.php");
+
 ?>
 <html lang="en">
 <head>
@@ -23,10 +24,10 @@
                 <img id="img-logo img-pq" class="img-nav no-border" src="../img/icons/AdminBanner_tj.png" alt="logoTJ"/>
             </a>
         </li>
-        <li style="font-size: 14px; max-width: 27vw;">
+        <li style="font-family: monospace; font-size: 14px; max-width: 27vw;padding-right: 15pt;">
             <h3>
-                Doble clic -> Editar campos <br>
-                Botón guardar -> Confirmar cambios
+                Doble clic => Editar campos <br>
+                Botón "Editar..." => Confirmar cambios
             </h3>
         </li>
         <li>

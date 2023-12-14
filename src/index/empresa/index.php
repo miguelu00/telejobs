@@ -15,6 +15,9 @@
             $_SESSION['userData'] = select("empresas", "*", "email LIKE '" . $_SESSION['user'] . "'");
         }
     }
+    if ($_SESSION['userData'] == null) {
+        header("Location: telejobs.net?checkLogin=true");
+    }
     $userD = $_SESSION['userData'];
     if ($userD == null) {
         header("Location: ../demandantes/");

@@ -18,7 +18,14 @@ jQuery(function() {
 
 
     $("#crearOferta").on("click", abrirCreador); //Abrir/cerrar menú de crear ofertas
-    $("#trashOferta").on("click", abrirEliminarOferts);
+    if (document.querySelector("#ofertaDel").children.length != 0) {
+        $("#trashOferta").on("click", abrirEliminarOferts);
+        $("#delOferta").on("click", function() {
+            if (confirm("¿Seguro que quiere eliminar su oferta de trabajo num. " + $("#ofertaDel").val() + "?")) {
+                AJAXBorrar("ofertas_trab", $("#ofertaDel").val());
+            }
+        });
+    }
     $("#addExp").on("click", agregarExp); //agregar experiencia con botón (+)
     $("#addHabil").on("click", agregarHabil); //agregar habilidades con el botón (+)
     $("#enableEXP").on("click", function() {
@@ -31,12 +38,6 @@ jQuery(function() {
             });
         });
     });//Desactivar div de "Experiencia"
-
-    $("#delOferta").on("click", function() {
-        if (confirm("¿Seguro que quiere eliminar su oferta de trabajo num. " + $("#ofertaDel").val() + "?")) {
-            AJAXBorrar("ofertas_trab", $("#ofertaDel").val());
-        }
-    });
 
     function AJAXBorrar(tablaBorrar, id) {
         let campoID = "";
@@ -176,7 +177,9 @@ jQuery(function() {
             $("#mostrarOfertas").fadeOut(function() {
                 $("#creador").fadeIn();
             });
-            $("#eliminarOfertas").fadeOut();
+            if (document.querySelector("#ofertaDel").children.length != 0) {
+                $("#eliminarOfertas").fadeOut();
+            }
             $("nav h3").html("Creando oferta de Empleo para " + "<b>" + nombreEMP + "</b>.");
             return true;
         }
